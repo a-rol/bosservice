@@ -49,9 +49,8 @@ var slider_data;
     });
 	
 	jQuery("#btn_delete").click(function(){
-		  if (map.hasLayer(firstGroup)) {
-            map.removeLayer(firstGroup);
-          } 
+           firstGroup.clearLayers();
+          
     });
 	
 	map.on('moveend', function() {
