@@ -37,11 +37,40 @@ var markerList = new L.FeatureGroup();
     });
 	
 	jQuery("#btn_search").click(function(){
-		alert("Hier kommt die Verknüpfung zum Geocoder.");
+		
+		var search_data = jQuery("#form_adress").val();
+		var url_geocoder = "http://localhost:8080/pubapp/geocoder";
+		
+		jQuery.ajax({
+			type: 'GET',
+			dataType: 'jsonp',
+			url: url_geocoder,
+			crossDomain : true,
+			data: 'queryString='+search_data+'&locale=de',
+			xhrFields: { withCredentials: true},
+			success: function(data_geocoder){
+				long_mapcenter = data_geocoder.features[0].geometry.coordinates[0];
+				lat_mapcenter = data_geocoder.features[0].geometry.coordinates[1];
+				map.setView(new L.LatLng(lat_mapcenter, long_mapcenter), 10);
+			}
+		})
+		// .done(function( data ) {
+			// console.log("done");
+			// console.log(data);
+		// })
+		// .fail( function(xhr, textStatus, errorThrown) {
+			// console.log(xhr);
+			// alert(textStatus);
+		// });	
     });
+	
 	
 	jQuery("#btn_bos").click(function(){
 
+		// var search_data = ;
+		// var url_bos_standorte = "http://............";
+		
+	
 		var fireIcon = L.icon({
 			iconUrl: 'marker/firetruck.svg',
 			iconSize:     [38, 95], // size of the icon
@@ -70,9 +99,10 @@ var markerList = new L.FeatureGroup();
     });
 	
 	map.on('moveend', function() {
-		alert(map.getBounds().getEast());
+		map_east = map.getBounds().getEast();
+
 		
-		// prüfen ob die koord im map rechteck ist für big chart
+		// prüfen ob die koord im map rechteck ist 
 		// if(map.getBounds().contains([parseFloat(latitude), parseFloat(longitude)]) == true){
 			// Hier kommt die prüfung rein!
 		// }
