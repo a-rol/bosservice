@@ -12,7 +12,7 @@ import isochroneAPI.GetPropertyValue;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-@Path("api")
+@Path("isochrone")
 public class RequestHandler {
  
 //	http://143.93.114.138/api/isochrone?point=51.131108%2C12.414551&time_limit=300
