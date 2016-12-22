@@ -1,6 +1,7 @@
 package isochroneAPI;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -17,7 +18,7 @@ public class RequestHandler {
  
 //	http://143.93.114.138/api/isochrone?point=51.131108%2C12.414551&time_limit=300
 	
-    @GET
+    @POST
     @Produces(MediaType.TEXT_PLAIN)  
     
     //@QueryParam("lng") String lng, @QueryParam("lat") String lat, @QueryParam("time_min") String time_min
