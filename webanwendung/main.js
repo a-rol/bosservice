@@ -85,12 +85,37 @@ var markerList = new L.FeatureGroup();
 		markerList.addLayer(marker);
 		markerList.addLayer(marker2);
 		map.addLayer(markerList);
-		
     });
 	
 	jQuery("#btn_polygon").click(function(){
-		alert("poly");
-		// Hier kommt Polygon erzeugen mit Anfrage an den Graphhopper MS
+		var query_poly = create_obj_poly();
+		console.log(query_poly);
+		// Hier kommt Polygon erzeugen mit Anfrage an den Graphhopper 
+	
+		var url_isochrone = "http://localhost:8085/isochrone";
+		
+		jQuery.ajax({
+			type: 'POST',
+			dataType: 'jsonp',
+			url: url_isochrone,
+			crossDomain : true,
+			data: 'queryJson='+query_poly,
+			// headers: 'queryJson='+query_poly,
+			// headers: { 'queryJson': query_poly },
+			// xhrFields: {withCredentials: true},
+			success: function(data_poly){
+				console.log(data_poly);
+			}
+		})
+		// .done(function( data ) {
+			// console.log("done");
+			// console.log(data);
+		// })
+		// .fail( function(xhr, textStatus, errorThrown) {
+			// console.log(xhr);
+			// alert(textStatus);
+		// });
+		
     });
 	
 	jQuery("#btn_delete").click(function(){
@@ -128,8 +153,33 @@ function get_map(){
 }
 
 
+function create_obj_poly(){
+	var obj = new Object();
+		obj.timelimit = slider_data;
+		bos = [];
+		
+		var i = 0;
+		for (var fire_marker in markerList._layers){
+		
+			if (fire_marker._latlng !== null) {
+				bos_item = {};
+				
+				coord_item = {};
+				
+				coord_item['lat'] = markerList._layers[fire_marker]._latlng.lat;
+				coord_item['lng'] = markerList._layers[fire_marker]._latlng.lng;
+				
+				bos_item = coord_item;
+				
+				bos.push(bos_item);
+		
+				i++;
+			}
+			
+		};
+		
+		obj.bos = bos;
 
-
-
-
-
+	var jsonString = JSON.stringify(obj);
+	return jsonString;
+}
