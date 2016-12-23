@@ -1,14 +1,16 @@
-package isochroneAPI.ParseJSON;
+package isochroneAPI.ParseGEOJSON;
 
+import java.util.List;
 
-public class polygons {
+public class Polygon {
 	
-	private geometry geometry;
+	
+	
 	private String type;
+	private List<FeatureList> features;
 	
-	
-	public geometry getGeometry(){
-		return geometry;
+	public List<FeatureList> getFeature() {
+            return features;
 	}
 	
 	public String getType(){

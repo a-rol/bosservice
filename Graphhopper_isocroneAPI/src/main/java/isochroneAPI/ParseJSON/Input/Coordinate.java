@@ -1,14 +1,14 @@
-package isochroneAPI.ParseJSON;
+package isochroneAPI.ParseJSON.Input;
 
-public class pointtype {
-	private double longitude;
-	private double latitude;
+public class Coordinate {
+	private double lng;
+	private double lat;
 	
 	public double getLongitude(){
-		return longitude;
+		return lng;
 	}
 	
 	public double getLatitude(){
-		return latitude;
+		return lat;
 	}
 }

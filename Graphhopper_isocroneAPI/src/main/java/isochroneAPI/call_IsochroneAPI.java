@@ -1,55 +1,89 @@
 package isochroneAPI;
 
 
-import isochroneAPI.ParseJSON.*;
+import isochroneAPI.ParseJSON.Input.InputJSON;
+import isochroneAPI.ParseJSON.Input.Coordinate;
+import isochroneAPI.ParseGEOJSON.IsochroneGEOJSON;
 import java.net.*;
+import java.util.List;
+import java.util.ArrayList;
 import com.google.gson.Gson;
 import java.io.*;
 
 public class call_IsochroneAPI {
 
+	
 
-	public static String URLConnectionReader(String lng, String lat, String time_min ) {
+    
+	
+
+	public static String URLConnectionReader(InputJSON InputJSON) {
 		try{
-	        URL graphhopper = new URL(buildURL(lng , lat, time_min));
-	        URLConnection gc = graphhopper.openConnection();
-	        BufferedReader in = new BufferedReader(new InputStreamReader(gc.getInputStream()));
+
 	        
-	        //Test1
-	        //InputStreamReader in = new InputStreamReader(gc.getInputStream());
-	        //next step give "in" Object to gson
-	        //return in;
-	        
-	        //Gson gson = new Gson();        
-	        	        
-	        //IsochroneJSON IsochroneObj = gson.fromJson(in, IsochroneJSON.class);
-	        //System.out.println(IsochroneObj.getPolygons().get(1).getGeometry().getpoint().get(1).getLatitude());
-	        
-	        String inputLine;
-	        String output = "";
-	        while ((inputLine = in.readLine()) != null)
-	        	output = inputLine;
-	            System.out.println(inputLine);
-	        in.close(); 
-	        
-	        return output;
+			//Variante für die Abfrage eines Polygone von der IsochroneAPI --> direkte Weitergabe
+	        if (InputJSON.getCoordinates().size() == 1){
+	        	
+	        	List<String> UrlList = buildUrlList(InputJSON);
+		        URL graphhopper = new URL(UrlList.get(0));
+		        URLConnection gc = graphhopper.openConnection();
+		        BufferedReader in = new BufferedReader(new InputStreamReader(gc.getInputStream()));
+		        String inputLine;
+		        String output = "";
+		        while ((inputLine = in.readLine()) != null)
+		        	output = inputLine;
+		        in.close(); 
+		        
+		        return output;
+	        	
+	      	//Variante für die Abfrage mehrerer Polygone von der IsochroneAPI
+	        }else if (InputJSON.getCoordinates().size() > 1){
+	        	
+		        List<IsochroneGEOJSON> GeoJsonObjList = new ArrayList<IsochroneGEOJSON>();
+	        	List<String> UrlList = buildUrlList(InputJSON);
+	        	Gson gson = new Gson();
+	        	
+		        for (int i = 0; i < UrlList.size(); i++){
+		        	URL graphhopper = new URL(UrlList.get(0));
+			        URLConnection gc = graphhopper.openConnection();
+			        BufferedReader in = new BufferedReader(new InputStreamReader(gc.getInputStream()));		        	                
+			        IsochroneGEOJSON IsochroneObj = gson.fromJson(in, IsochroneGEOJSON.class);
+			        GeoJsonObjList.add(IsochroneObj);
+		        }
+		        //Zusammenführen der abgefragen Polygone in ein einziges GEOJSON
+		        for (int i = 1; i < UrlList.size(); i++){
+			        GeoJsonObjList.get(0).getPolygons().getFeature().add(GeoJsonObjList.get(i).getPolygons().getFeature().get(0));
+		        }
+		        //Umwandlung des Java-JsonObjektes in ein Json(String)
+		        String geoJson = gson.toJson(GeoJsonObjList.get(0), IsochroneGEOJSON.class); 
+	        	return geoJson;
+	        }
+	        return "nothing";     
 	        
 		}catch (IOException e) {
 				//event 
 				e.printStackTrace();
-			return null;
+			return "error";
 		} 
 	}
-	
-	public static String buildURL(String lng, String lat, String time_min ){
-		//test json call from user
-			//{"time_limit_min":"5","point":{"HW":"50","RW":"12"}}
-	
+
+	//Erstellt Liste mit URL-Abfragen
+	public static List<String> buildUrlList(InputJSON InputJSON){
 		
-		String hochwert = lat;
-		String rechtswert = lng;
-		int time_limit = Integer.parseInt(time_min) * 60;
+		int time_limit = InputJSON.getTime_min() * 60;
+		List<String> URLList = new ArrayList<String>();
 		
+		for (int  i=0; i < InputJSON.getCoordinates().size(); i++){
+			double hochwert = InputJSON.getCoordinates().get(i).getLatitude();
+			double rechtswert = InputJSON.getCoordinates().get(i).getLongitude();
+			
+			String URL = "http://143.93.114.138/api/isochrone?point="+ hochwert +"%2C"+ rechtswert +"&time_limit="+ time_limit;
+			
+			URLList.add(URL);
+		}
+
+		return URLList;
+		/*
     	//Get API Key
     	String prop = "";
     	GetPropertyValue properties = new GetPropertyValue();
@@ -59,9 +93,7 @@ public class call_IsochroneAPI {
 			//event 
 			e.printStackTrace();
 		}
-		
-		String APIKey = prop;
-		String URL = "http://143.93.114.138/api/isochrone?point="+ hochwert +"%2C"+ rechtswert +"&time_limit="+ time_limit;
-		return URL;
+		*/
+
 	}
 }

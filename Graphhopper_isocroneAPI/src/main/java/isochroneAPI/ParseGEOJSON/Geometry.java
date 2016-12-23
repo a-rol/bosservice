@@ -1,12 +1,13 @@
-package isochroneAPI.ParseJSON;
+package isochroneAPI.ParseGEOJSON;
 
 import java.util.List;
 
-public class geometry {
-	private List<pointtype> coordinates;
+public class Geometry {
 	private String type;
+	private List<List<List<Double>>> coordinates;
+
 	
-	public List<pointtype> getpoint(){
+	public List<List<List<Double>>> getlatlng(){
 		return coordinates;
 	}
 	public String getType(){

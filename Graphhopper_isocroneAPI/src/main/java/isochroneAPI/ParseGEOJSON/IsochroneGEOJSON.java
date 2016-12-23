@@ -1,16 +1,11 @@
-package isochroneAPI.ParseJSON;
+package isochroneAPI.ParseGEOJSON;
 
-import java.util.List;
+public class IsochroneGEOJSON {
 
-public class IsochroneJSON {
-
-		private List<polygons> polygonList;
+		private Polygon polygons;
 		
-		public List<polygons> getPolygons() {
-	            return polygonList;
+		public Polygon getPolygons() {
+	            return polygons;
 		}
 
-	  
-
 }
-
