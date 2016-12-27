@@ -87,36 +87,36 @@ var markerList = new L.FeatureGroup();
 		map.addLayer(markerList);
     });
 	
+	
+	/*
 	jQuery("#btn_polygon").click(function(){
 		var query_poly = create_obj_poly();
 		console.log(query_poly);
-		// Hier kommt Polygon erzeugen mit Anfrage an den Graphhopper 
 	
 		var url_isochrone = "http://localhost:8085/isochrone";
 		
 		jQuery.ajax({
-			type: 'POST',
-			dataType: 'jsonp',
+			method: 'POST',
+			// headers: { 
+				// 'Accept': 'application/json',
+				// 'Content-Type': 'application/json', 
+				// 'Access-Control-Allow-Origin': '*'
+			// },
+			 headers: {
+                    'Access-Control-Allow-Origin': 'http://localhost:8085'
+                },
+			
+			dataType: 'json',
 			url: url_isochrone,
 			crossDomain : true,
-			data: 'queryJson='+query_poly,
-			// headers: 'queryJson='+query_poly,
-			// headers: { 'queryJson': query_poly },
-			// xhrFields: {withCredentials: true},
+			data: query_poly,
 			success: function(data_poly){
 				console.log(data_poly);
 			}
-		})
-		// .done(function( data ) {
-			// console.log("done");
-			// console.log(data);
-		// })
-		// .fail( function(xhr, textStatus, errorThrown) {
-			// console.log(xhr);
-			// alert(textStatus);
-		// });
-		
+		})		
     });
+	
+	*/
 	
 	jQuery("#btn_delete").click(function(){
         markerList.clearLayers();
