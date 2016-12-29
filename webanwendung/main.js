@@ -88,7 +88,6 @@ var markerList = new L.FeatureGroup();
     });
 	
 	
-	/*
 	jQuery("#btn_polygon").click(function(){
 		var query_poly = create_obj_poly();
 		console.log(query_poly);
@@ -96,27 +95,21 @@ var markerList = new L.FeatureGroup();
 		var url_isochrone = "http://localhost:8085/isochrone";
 		
 		jQuery.ajax({
-			method: 'POST',
-			// headers: { 
-				// 'Accept': 'application/json',
-				// 'Content-Type': 'application/json', 
-				// 'Access-Control-Allow-Origin': '*'
-			// },
-			 headers: {
-                    'Access-Control-Allow-Origin': 'http://localhost:8085'
-                },
-			
+			type: 'POST',
+			 headers: { 
+				 'Accept': 'application/json',
+				 'Content-Type': 'application/json', 
+			 },			
 			dataType: 'json',
 			url: url_isochrone,
 			crossDomain : true,
 			data: query_poly,
 			success: function(data_poly){
-				console.log(data_poly);
+				console.log(data_poly);				
 			}
 		})		
     });
 	
-	*/
 	
 	jQuery("#btn_delete").click(function(){
         markerList.clearLayers();
