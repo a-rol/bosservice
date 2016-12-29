@@ -21,7 +21,7 @@ public class ResponseHandler {
 			double[] coordinates = new double[2];
 			coordinates[1] = place.getLat();
 			coordinates[0] = place.getLon();
-			GeoJsonFeature currentFeature = new GeoJsonFeature("Feature", new GeoJsonProperties(place.getTags().getName()), new GeoJsonGeometry("Point", coordinates));
+			GeoJsonFeature currentFeature = new GeoJsonFeature("Feature", new GeoJsonProperties(place.getTags().getName()) , new GeoJsonGeometry("Point", coordinates));
 			features.add(currentFeature);
 		}
 		

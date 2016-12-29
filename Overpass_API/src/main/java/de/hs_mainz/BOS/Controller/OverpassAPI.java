@@ -34,7 +34,7 @@ public class OverpassAPI {
 		} else {
 			for (Place place : places) {
 				System.out.println(place.getType());
-				System.out.println(place.getId());
+				//System.out.println(place.getId());
 				System.out.println(place.getLat());
 				System.out.println(place.getLon());
 				System.out.println(place.getTags().getAmenity());

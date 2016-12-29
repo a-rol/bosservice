@@ -4,7 +4,7 @@ public class Place {
 	
 	private String type;
 	
-	private int id;
+	//private int id;
 	
 	private double lat;
 	
@@ -18,12 +18,12 @@ public class Place {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public int getId() {
+	/*public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
-	}
+	}*/
 	public double getLat() {
 		return lat;
 	}
@@ -33,7 +33,7 @@ public class Place {
 	public double getLon() {
 		return lon;
 	}
-	public void setLng(double lon) {
+	public void setLon(double lon) {
 		this.lon = lon;
 	}
 	public Tags getTags() {
