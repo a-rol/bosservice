@@ -18,6 +18,7 @@ public class JerseyEmbeddedHTTPServer {
     public static void main(String[] args) throws IOException {
         System.out.println("Starting HTTPServer...\n");
         HttpServer HTTPServer = createHttpServer();
+
         HTTPServer.start();
         System.out.println(String.format("\nJersey Application Server started with WADL available at " + "%sapplication.wadl\n", getURI()));
         System.out.println("Started Embedded Jersey HTTPServer Successfully !!!");
@@ -25,6 +26,7 @@ public class JerseyEmbeddedHTTPServer {
  
     private static HttpServer createHttpServer() throws IOException {
         ResourceConfig resourceConfig = new PackagesResourceConfig("isochroneAPI");
+        resourceConfig.getContainerResponseFilters().add(CORS_Filter.class);
         return HttpServerFactory.create(getURI(), resourceConfig);
     }
  

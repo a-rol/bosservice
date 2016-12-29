@@ -4,6 +4,7 @@ package isochroneAPI;
 import isochroneAPI.ParseJSON.Input.InputJSON;
 import isochroneAPI.ParseJSON.Input.Coordinate;
 import isochroneAPI.ParseGEOJSON.IsochroneGEOJSON;
+import isochroneAPI.ParseGEOJSON.Polygon;
 import java.net.*;
 import java.util.List;
 import java.util.ArrayList;
@@ -11,16 +12,9 @@ import com.google.gson.Gson;
 import java.io.*;
 
 public class call_IsochroneAPI {
-
-	
-
-    
-	
-
 	public static String URLConnectionReader(InputJSON InputJSON) {
 		try{
-
-	        
+   
 			//Variante für die Abfrage eines Polygone von der IsochroneAPI --> direkte Weitergabe
 	        if (InputJSON.getCoordinates().size() == 1){
 	        	
@@ -28,13 +22,11 @@ public class call_IsochroneAPI {
 		        URL graphhopper = new URL(UrlList.get(0));
 		        URLConnection gc = graphhopper.openConnection();
 		        BufferedReader in = new BufferedReader(new InputStreamReader(gc.getInputStream()));
-		        String inputLine;
-		        String output = "";
-		        while ((inputLine = in.readLine()) != null)
-		        	output = inputLine;
-		        in.close(); 
-		        
-		        return output;
+		        // Gson notwendig da die Oberste Objektebene des zurückgegebenen JSON von der API nicht zu einem GEOJSON gehört
+		        Gson gson = new Gson();
+		        IsochroneGEOJSON IsochroneObj = gson.fromJson(in, IsochroneGEOJSON.class);
+		        String geoJson = gson.toJson(IsochroneObj.getPolygons(), Polygon.class); 
+		        return geoJson;
 	        	
 	      	//Variante für die Abfrage mehrerer Polygone von der IsochroneAPI
 	        }else if (InputJSON.getCoordinates().size() > 1){
@@ -43,8 +35,9 @@ public class call_IsochroneAPI {
 	        	List<String> UrlList = buildUrlList(InputJSON);
 	        	Gson gson = new Gson();
 	        	
+	        	// Iteration durch die UrlListe und Umwandlung des Abfrageergebnisses in java Objekt
 		        for (int i = 0; i < UrlList.size(); i++){
-		        	URL graphhopper = new URL(UrlList.get(0));
+		        	URL graphhopper = new URL(UrlList.get(i));
 			        URLConnection gc = graphhopper.openConnection();
 			        BufferedReader in = new BufferedReader(new InputStreamReader(gc.getInputStream()));		        	                
 			        IsochroneGEOJSON IsochroneObj = gson.fromJson(in, IsochroneGEOJSON.class);
@@ -55,8 +48,10 @@ public class call_IsochroneAPI {
 			        GeoJsonObjList.get(0).getPolygons().getFeature().add(GeoJsonObjList.get(i).getPolygons().getFeature().get(0));
 		        }
 		        //Umwandlung des Java-JsonObjektes in ein Json(String)
-		        String geoJson = gson.toJson(GeoJsonObjList.get(0), IsochroneGEOJSON.class); 
+		        String geoJson = gson.toJson(GeoJsonObjList.get(0).getPolygons(), Polygon.class);
+		        
 	        	return geoJson;
+	        	
 	        }
 	        return "nothing";     
 	        
