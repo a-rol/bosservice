@@ -23,4 +23,10 @@ public class GeoJsonFeatureCollection {
 		this.type = type;
 	}
 
+	/*
+	 * ({type":"FeatureCollection","features":[
+	 * {"type":"Feature","properties":{"name":"Freiwillige Feuerwehr Sossenheim"},
+	 * "geometry":{"type":"Point","coordinates":[8.5689493 (lon),50.1214732 (lat)]}},
+	 */
+	
 }

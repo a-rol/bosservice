@@ -1,6 +1,7 @@
 package de.hs_mainz.BOS.Model;
 
 public class GeoJsonFeature {
+	
 	private String type;
 	
 	public static class GeoJsonGeometry {
@@ -37,7 +38,7 @@ public class GeoJsonFeature {
 	
 	public GeoJsonFeature(String type, GeoJsonProperties geoJsonProperties, GeoJsonGeometry geometry) {
 		this.type = type;
-		this.properties = properties;
+		this.properties = geoJsonProperties;
 		this.geometry = geometry;
 	}
 	

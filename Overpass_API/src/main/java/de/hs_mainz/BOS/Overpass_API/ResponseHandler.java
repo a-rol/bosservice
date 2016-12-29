@@ -19,9 +19,9 @@ public class ResponseHandler {
 		for (Place place : allBOS) {
 			//set Coordinates for GeoJsonGeometry
 			double[] coordinates = new double[2];
-			coordinates[1] = place.getGeometry().getLocation().getLat();
-			coordinates[0] = place.getGeometry().getLocation().getLng();
-			GeoJsonFeature currentFeature = new GeoJsonFeature("Feature", new GeoJsonProperties(place.getName()), new GeoJsonGeometry("Point", coordinates));
+			coordinates[1] = place.getLat();
+			coordinates[0] = place.getLon();
+			GeoJsonFeature currentFeature = new GeoJsonFeature("Feature", new GeoJsonProperties(place.getTags().getName()), new GeoJsonGeometry("Point", coordinates));
 			features.add(currentFeature);
 		}
 		
@@ -30,6 +30,39 @@ public class ResponseHandler {
 		String jsonInString = gson.toJson(featureCollection);
 		
 		return jsonInString;
+		/*
+		 * {
+		 * "version":0.6,
+		 * "generator":"Overpass API",
+		 * "osm3s":{
+		 * "timestamp_om_base":"2016-12-29T12:30:03Z","copyright":"The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."},
+		 * "elements":[
+		 * {
+		 * "type":"node",
+		 * "id": 32468124,
+		 * "lat": 50.1214732,
+		 * "lon": 8.5689493,
+		 * "tags":{
+		 * 	"amenity":"fire_station",
+		 * 	"name":"Freiwillige Feuerwehr Sossenheim"
+		 * }
+		 * },
+		 * 
+		 * }
+		 */
+		
+		/*
+		 * GEO JSON ARNO
+		 * ({"type":"FeatureCollection",
+		 * "features":[
+		 * {...}]})
+		 */
+		
+		/*
+		 * ({type":"FeatureCollection","features":[
+		 * {"type":"Feature","properties":{"name":"Freiwillige Feuerwehr Sossenheim"},
+		 * "geometry":{"type":"Point","coordinates":[8.5689493 (lon),50.1214732 (lat)]}},
+		 */
 	}
 
 }

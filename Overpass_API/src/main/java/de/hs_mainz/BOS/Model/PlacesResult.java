@@ -4,10 +4,10 @@ import java.util.List;
 
 public class PlacesResult {
 	
-	private List<Place> results;
+	private List<Place> elements;
 	
 	public List<Place> getList() {
-		return this.results;
+		return this.elements;
 	}
 
 }

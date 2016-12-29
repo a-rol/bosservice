@@ -10,7 +10,7 @@ public class BOS {
 	
 	private double east;
 	
-	private String interest;
+	private String amenity;
 		
 	public double getSouth() {
 		return this.south;
@@ -42,6 +42,14 @@ public class BOS {
 	
 	public void setEast( double east) {
 		this.east = east;
+	}
+
+	public String getAmenity() {
+		return amenity;
+	}
+
+	public void setAmenity(String amenity) {
+		this.amenity = amenity;
 	}
 
 }
