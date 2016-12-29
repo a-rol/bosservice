@@ -51,7 +51,6 @@ public class call_IsochroneAPI {
 		        }
 		        //Umwandlung des Java-JsonObjektes in ein Json(String)
 		        String geoJson = gson.toJson(GeoJsonObjList.get(0).getPolygons(), Polygon.class);
-		        System.out.println(geoJson);
 	        	return geoJson;
 	        	
 	        }
