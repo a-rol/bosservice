@@ -105,7 +105,14 @@ var markerList = new L.FeatureGroup();
 			crossDomain : true,
 			data: query_poly,
 			success: function(data_poly){
-				console.log(data_poly);				
+				console.log(data_poly);	
+				// geojsonLayer = L.geoJson(data_poly).addTo(map);
+				//map.fitBounds(geojsonLayer.getBounds());
+				
+				console.log(JSON.stringify(data_poly));
+
+	
+				
 			}
 		})		
     });
