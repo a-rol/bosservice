@@ -4,6 +4,7 @@ package isochroneAPI;
 import isochroneAPI.ParseJSON.Input.InputJSON;
 import isochroneAPI.ParseJSON.Input.Coordinate;
 import isochroneAPI.ParseGEOJSON.IsochroneGEOJSON;
+import isochroneAPI.ParseGEOJSON.Polygon;
 import java.net.*;
 import java.util.List;
 import java.util.ArrayList;
@@ -49,7 +50,8 @@ public class call_IsochroneAPI {
 			        GeoJsonObjList.get(0).getPolygons().getFeature().add(GeoJsonObjList.get(i).getPolygons().getFeature().get(0));
 		        }
 		        //Umwandlung des Java-JsonObjektes in ein Json(String)
-		        String geoJson = gson.toJson(GeoJsonObjList.get(0), IsochroneGEOJSON.class); 
+		        String geoJson = gson.toJson(GeoJsonObjList.get(0).getPolygons(), Polygon.class);
+		        System.out.println(geoJson);
 	        	return geoJson;
 	        }
 	        return "nothing";     
