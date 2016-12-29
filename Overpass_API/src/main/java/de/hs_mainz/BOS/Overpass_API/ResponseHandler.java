@@ -19,8 +19,8 @@ public class ResponseHandler {
 		for (Place place : allBOS) {
 			//set Coordinates for GeoJsonGeometry
 			double[] coordinates = new double[2];
-			coordinates[1] = place.getGeometry().getLocation().getSouth();
-			coordinates[0] = place.getGeometry().getLocation().getWest();
+			coordinates[1] = place.getGeometry().getLocation().getLat();
+			coordinates[0] = place.getGeometry().getLocation().getLng();
 			GeoJsonFeature currentFeature = new GeoJsonFeature("Feature", new GeoJsonProperties(place.getName()), new GeoJsonGeometry("Point", coordinates));
 			features.add(currentFeature);
 		}

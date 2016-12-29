@@ -19,7 +19,7 @@ public class OverpassAPI {
 	
 	private static final String PLACES_API_BASE ="http://overpass-api.de/api/interpreter?data=[out:json];";
 	
-	public static ArrayList<Place> search(String keyword, BOS bos) throws UnsupportedEncodingException {
+	public ArrayList<Place> search(String keyword, BOS bos) throws UnsupportedEncodingException {
 		
 		String requestStart = buildRequest(keyword, bos);
 		

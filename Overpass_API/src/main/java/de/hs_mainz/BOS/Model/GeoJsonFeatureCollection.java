@@ -6,7 +6,7 @@ public class GeoJsonFeatureCollection {
 	private String type;
 	private List<GeoJsonFeature> features;
 	
-	public GeoJsonFeatureCollection (String type, List<GeoJsonFeature> feature) {
+	public GeoJsonFeatureCollection (String type, List<GeoJsonFeature> features) {
 		this.type = type;
 		this.features = features;
 	}

@@ -11,7 +11,7 @@ public class BOS {
 	private double east;
 	
 	private String interest;
-	
+		
 	public double getSouth() {
 		return this.south;
 	}

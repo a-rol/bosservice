@@ -25,7 +25,9 @@ public class RequestHandler {
 		System.out.println(north);
 		System.out.println(east);
 		
-		ArrayList<Place> allBOS = getRelevantBOS(interest, Double.parseDouble(south), Double.parseDouble(west), Double.parseDouble(north), Double.parseDouble(east));
+		ArrayList<Place> allBOS = getRelevantBOS("fire_station",50.0,8.0,49.0,9.0);
+		
+		//ArrayList<Place> allBOS = getRelevantBOS(interest, Double.parseDouble(south), Double.parseDouble(west), Double.parseDouble(north), Double.parseDouble(east));
 		ResponseHandler responseHandler = new ResponseHandler();
 		String response = responseHandler.getResponse(allBOS);
 		return response;

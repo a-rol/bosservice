@@ -2,44 +2,24 @@ package de.hs_mainz.BOS.Model;
 
 public class Location {
 	
-	private double south;
+	private double lat;
 	
-	private double west;
+	private double lng;
 	
-	private double north;
-	
-	private double east;
-
-	public double getSouth() {
-		return this.south;
+	public double getLat() {
+		return this.lat;
 	}
 	
-	public void setSouth(double south) {
-		this.south = south;
+	public void setLat(double lat) {
+		this.lat = lat;
 	}
 	
-	public double getWest() {
-		return this.west;
+	public double getLng() {
+		return this.lng;
 	}
 	
-	public void setWest(double west) {
-		this.west = west;
-	}
-	
-	public double getNorth() {
-		return this.north;
-	}
-	
-	public void setNorth(double north) {
-		this.north = north;
-	}
-	
-	public double getEast() {
-		return this.east;
-	}
-	
-	public void setEast(double east) {
-		this.east = east;
+	public void setLng(double lng) {
+		this.lng = lng;
 	}
 
 }
