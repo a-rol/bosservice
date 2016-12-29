@@ -13,7 +13,7 @@ import org.glassfish.jersey.server.ResourceConfig;
  */
 public class OverpassAPImain 
 {
-	public static final String BASE_URI = "http://localhost:8086/";
+	public static final String BASE_URI = "http://localhost:8090/";
 	
 	@SuppressWarnings("deprecation")
 	public static void main( String[] args) throws IOException {
@@ -27,5 +27,8 @@ public class OverpassAPImain
 		final ResourceConfig rc = new ResourceConfig().packages("de.hs_mainz.BOS.Overpass_API");
 		return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI),rc);
 	}
+	
+	//Beispiel Aufruf
+	//localhost:8088/Overpass_API?callback=xxx&interest=fire_station&south=45.0&west=9.0&north=50.0&east=8.0
 	
 }

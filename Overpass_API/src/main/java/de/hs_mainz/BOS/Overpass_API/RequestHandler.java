@@ -17,17 +17,17 @@ public class RequestHandler {
 
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	public String get(@QueryParam("callback") String callback, @QueryParam("amenity") String amenity, @QueryParam("south") String south, @QueryParam("west") String west, @QueryParam("north") String north, @QueryParam("east") String east) throws NumberFormatException, UnsupportedEncodingException {
+	public String get(@QueryParam("callback") String callback, @QueryParam("interest") String interest, @QueryParam("south") String south, @QueryParam("west") String west, @QueryParam("north") String north, @QueryParam("east") String east) throws NumberFormatException, UnsupportedEncodingException {
 		System.out.println(callback);
-		System.out.println(amenity);
+		System.out.println(interest);
 		System.out.println(south);
 		System.out.println(west);
 		System.out.println(north);
 		System.out.println(east);
 		
-		ArrayList<Place> allBOS = getRelevantBOS("fire_station",45.0,8.0,50.0,9.0);
+		//ArrayList<Place> allBOS = getRelevantBOS("fire_station",45.0,8.0,50.0,9.0);
 		
-		//ArrayList<Place> allBOS = getRelevantBOS(interest, Double.parseDouble(south), Double.parseDouble(west), Double.parseDouble(north), Double.parseDouble(east));
+		ArrayList<Place> allBOS = getRelevantBOS(interest, Double.parseDouble(south), Double.parseDouble(west), Double.parseDouble(north), Double.parseDouble(east));
 		ResponseHandler responseHandler = new ResponseHandler();
 		String response = responseHandler.getResponse(allBOS);
 		return response;
@@ -42,6 +42,7 @@ public class RequestHandler {
 	
 	public ArrayList<Place> getRelevantBOS(String interest, Double south, Double west, Double north, Double east) throws UnsupportedEncodingException {
 		BOS bos = new BOS();
+		bos.setInterest(interest);
 		bos.setSouth(south);
 		bos.setWest(west);
 		bos.setNorth(north);
