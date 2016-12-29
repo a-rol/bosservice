@@ -106,10 +106,10 @@ var markerList = new L.FeatureGroup();
 			data: query_poly,
 			success: function(data_poly){
 				console.log(data_poly);	
-				// geojsonLayer = L.geoJson(data_poly).addTo(map);
-				//map.fitBounds(geojsonLayer.getBounds());
+				geojsonLayer = L.geoJson(data_poly).addTo(map);
+				// map.fitBounds(geojsonLayer.getBounds());
 				
-				console.log(JSON.stringify(data_poly));
+				// console.log(JSON.stringify(data_poly));
 
 	
 				
@@ -120,7 +120,7 @@ var markerList = new L.FeatureGroup();
 	
 	jQuery("#btn_delete").click(function(){
         markerList.clearLayers();
-		// Hier kommt noch Polygon löschen  
+		geojsonLayer.clearLayers();
     });
 	
 	map.on('moveend', function() {
