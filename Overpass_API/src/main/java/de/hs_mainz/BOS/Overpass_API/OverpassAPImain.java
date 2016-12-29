@@ -13,7 +13,7 @@ import org.glassfish.jersey.server.ResourceConfig;
  */
 public class OverpassAPImain 
 {
-	public static final String BASE_URI = "http://localhost:8098/";
+	public static final String BASE_URI = "http://localhost:8099/";
 	
 	@SuppressWarnings("deprecation")
 	public static void main( String[] args) throws IOException {
@@ -29,6 +29,6 @@ public class OverpassAPImain
 	}
 	
 	//Beispiel Aufruf
-	//localhost:8088/Overpass_API?callback=xxx&interest=fire_station&south=49.9221&west=8.0842&north=50.0972&east=8.4584
+	//localhost:8098/Overpass_API?callback=xxx&interest=fire_station&south=49.9221&west=8.0842&north=50.0972&east=8.4584
 	
 }
