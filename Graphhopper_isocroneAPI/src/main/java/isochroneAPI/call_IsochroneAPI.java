@@ -11,12 +11,6 @@ import com.google.gson.Gson;
 import java.io.*;
 
 public class call_IsochroneAPI {
-
-	
-
-    
-	
-
 	public static String URLConnectionReader(InputJSON InputJSON) {
 		try{
 
