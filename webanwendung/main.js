@@ -81,7 +81,7 @@ var markerList = new L.FeatureGroup();
 		});
 	
 		var marker = new L.marker([51.289, 9.42626],{icon: fireIcon});
-		var marker2 = new L.marker([50.889, 9.82626],{icon: fireIcon});
+		var marker2 = new L.marker([50.789, 9.82626],{icon: fireIcon});
 		markerList.addLayer(marker);
 		markerList.addLayer(marker2);
 		map.addLayer(markerList);
@@ -90,7 +90,6 @@ var markerList = new L.FeatureGroup();
 	
 	jQuery("#btn_polygon").click(function(){
 		var query_poly = create_obj_poly();
-		console.log(query_poly);
 	
 		var url_isochrone = "http://localhost:8085/isochrone";
 		
@@ -105,14 +104,8 @@ var markerList = new L.FeatureGroup();
 			crossDomain : true,
 			data: query_poly,
 			success: function(data_poly){
-				console.log(data_poly);	
+				console.log(JSON.stringify(data_poly));
 				geojsonLayer = L.geoJson(data_poly).addTo(map);
-				// map.fitBounds(geojsonLayer.getBounds());
-				
-				// console.log(JSON.stringify(data_poly));
-
-	
-				
 			}
 		})		
     });
