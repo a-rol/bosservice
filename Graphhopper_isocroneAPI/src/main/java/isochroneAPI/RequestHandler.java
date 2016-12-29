@@ -24,7 +24,7 @@ public class RequestHandler {
 	
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON) 
+    @Produces(MediaType.APPLICATION_JSON)
     //@Produces(MediaType.TEXT_PLAIN)  
     
     //@QueryParam("lng") String lng, @QueryParam("lat") String lat, @QueryParam("time_min") String time_min
