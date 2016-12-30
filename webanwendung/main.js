@@ -64,12 +64,29 @@ var markerList = new L.FeatureGroup();
 		// });	
     });
 	
-	
+	// Muss noch umgeschrieben bzw. bearbeitet werden für OverpassAPI
 	jQuery("#btn_bos").click(function(){
 
-		// var search_data = ;
-		// var url_bos_standorte = "http://............";
+		var search_data = create_fireIcon_marker();
+		var url_bos_standorte = "http://localhost:8099/Overpass_API";
 		
+		jQuery.ajax({
+			type: 'POST',
+			 headers: { 
+				 'Accept': 'application/json',
+				 'Content-Type': 'application/json', 
+			 },			
+			dataType: 'json',
+			url: url_bos_standorte,
+			crossDomain : true,
+			data: query_point,
+			success: function(data_point){				//Hier muss glaube ich (String keyword, BOS bos) rein??
+				console.log(JSON.stringify(data_point));
+				geojsonLayer = L.geoJson(data_point).addTo(map);
+			}
+		})		
+    });
+	
 	
 		var fireIcon = L.icon({
 			iconUrl: 'marker/firetruck.svg',
@@ -80,12 +97,35 @@ var markerList = new L.FeatureGroup();
 			popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 		});
 	
-		var marker = new L.marker([51.289, 9.42626],{icon: fireIcon});
-		var marker2 = new L.marker([50.789, 9.82626],{icon: fireIcon});
-		markerList.addLayer(marker);
-		markerList.addLayer(marker2);
-		map.addLayer(markerList);
+		
+		
+		
+		//var marker = new L.marker([51.289, 9.42626],{icon: fireIcon});
+		//var marker2 = new L.marker([50.789, 9.82626],{icon: fireIcon});
+		//markerList.addLayer(marker);
+		//markerList.addLayer(marker2);
+		//map.addLayer(markerList);
     });
+	
+	// Muss noch umgeschrieben bzw. bearbeitet werden für OverpassAPI
+	function create_fireIcon_marker(){
+		jQuery.ajax({
+			type: 'POST',
+			 headers: { 
+				 'Accept': 'application/json',
+				 'Content-Type': 'application/json', 
+			 },			
+			dataType: 'json',
+			url: url_bos_standorte,
+			crossDomain : true,
+			data: query_point,
+			success: function(data_point){		
+				console.log(JSON.stringify(data_point));
+				geojsonLayer = L.geoJson(data_point).addTo(map);
+			}
+		})		
+    });
+
 	
 	
 	jQuery("#btn_polygon").click(function(){
@@ -147,32 +187,20 @@ function get_map(){
 
 
 function create_obj_poly(){
-	var obj = new Object();
-		obj.timelimit = slider_data;
-		bos = [];
-		
-		var i = 0;
-		for (var fire_marker in markerList._layers){
-		
-			if (fire_marker._latlng !== null) {
-				bos_item = {};
-				
-				coord_item = {};
-				
-				coord_item['lat'] = markerList._layers[fire_marker]._latlng.lat;
-				coord_item['lng'] = markerList._layers[fire_marker]._latlng.lng;
-				
-				bos_item = coord_item;
-				
-				bos.push(bos_item);
-		
-				i++;
+	jQuery.ajax({
+			type: 'POST',
+			 headers: { 
+				 'Accept': 'application/json',
+				 'Content-Type': 'application/json', 
+			 },			
+			dataType: 'json',
+			url: url_isochrone,
+			crossDomain : true,
+			data: query_poly,
+			success: function(data_poly){
+				console.log(JSON.stringify(data_poly));
+				geojsonLayer = L.geoJson(data_poly).addTo(map);
 			}
-			
-		};
-		
-		obj.bos = bos;
-
-	var jsonString = JSON.stringify(obj);
-	return jsonString;
+		})		
+    });
 }
