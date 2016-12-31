@@ -67,12 +67,12 @@ var markerList = new L.FeatureGroup();
 	// Muss noch umgeschrieben bzw. bearbeitet werden für OverpassAPI
 	jQuery("#btn_bos").click(function(){
 
-		var query_point = create_fireIcon_marker();
+		var query_point = create_fireIcon_marker(); 					//Funktion zur Erstellung eines json
 		var url_bos_standorte = "http://localhost:8099/Overpass_API"; 	//Adresse des MicroServices
 		
 		jQuery.ajax({
 			type: 'POST', 												//Übergabetyp:POST
-			 headers: { 
+			 headers: { 												//Nötig um Zugriff zu haben (wegen POST)
 				 'Accept': 'application/json', 
 				 'Content-Type': 'application/json', 
 			 },			
@@ -81,8 +81,8 @@ var markerList = new L.FeatureGroup();
 			crossDomain : true,											//damit er auch auf andere Server zugreifen kann
 			data: query_point,											//Hier muss glaube ich (String keyword, BOS bos) rein??
 			success: function(data_point){								//Ergebnisverarbeitung					
-				console.log(JSON.stringify(data_point));
-				geojsonLayer = L.geoJson(data_point).addTo(map);
+				console.log(JSON.stringify(data_point));				//in Console wird Rückgabe in String umgewandelt
+				geojsonLayer = L.geoJson(data_point).addTo(map);		//Anzeige in Map
 			}
 		})		
     });
@@ -108,22 +108,14 @@ var markerList = new L.FeatureGroup();
     });
 	
 	// Muss noch umgeschrieben bzw. bearbeitet werden für OverpassAPI
-	function create_fireIcon_marker(){
-		jQuery.ajax({
-			type: 'POST',
-			 headers: { 
-				 'Accept': 'application/json',
-				 'Content-Type': 'application/json', 
-			 },			
-			dataType: 'json',
-			url: url_bos_standorte,
-			crossDomain : true,
-			data: query_point,
-			success: function(data_point){		
-				console.log(JSON.stringify(data_point));
-				geojsonLayer = L.geoJson(data_point).addTo(map);
-			}
-		})		
+	function create_fireIcon_marker(){									//Erstellen der json-Übergabedatei
+			var keyword = 'fire_station';								//Einzelne Variablen
+			var south = ;
+			var west = ;
+			var north = ;
+			var east = ;
+			
+			JSON.stringify({keyword, south, west, north, east}];		//Konvertierung zum json		
     });
 
 	
