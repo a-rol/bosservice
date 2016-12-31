@@ -67,20 +67,20 @@ var markerList = new L.FeatureGroup();
 	// Muss noch umgeschrieben bzw. bearbeitet werden für OverpassAPI
 	jQuery("#btn_bos").click(function(){
 
-		var search_data = create_fireIcon_marker();
-		var url_bos_standorte = "http://localhost:8099/Overpass_API";
+		var query_point = create_fireIcon_marker();
+		var url_bos_standorte = "http://localhost:8099/Overpass_API"; 	//Adresse des MicroServices
 		
 		jQuery.ajax({
-			type: 'POST',
+			type: 'POST', 												//Übergabetyp:POST
 			 headers: { 
-				 'Accept': 'application/json',
+				 'Accept': 'application/json', 
 				 'Content-Type': 'application/json', 
 			 },			
-			dataType: 'json',
-			url: url_bos_standorte,
-			crossDomain : true,
-			data: query_point,
-			success: function(data_point){				//Hier muss glaube ich (String keyword, BOS bos) rein??
+			dataType: 'json', 											//Übergabe erfolgt im json-Format
+			url: url_bos_standorte, 									//Adresse des MicroServices (oben)
+			crossDomain : true,											//damit er auch auf andere Server zugreifen kann
+			data: query_point,											//Hier muss glaube ich (String keyword, BOS bos) rein??
+			success: function(data_point){								//Ergebnisverarbeitung					
 				console.log(JSON.stringify(data_point));
 				geojsonLayer = L.geoJson(data_point).addTo(map);
 			}
