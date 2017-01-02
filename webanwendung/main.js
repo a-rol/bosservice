@@ -64,27 +64,32 @@ var markerList = new L.FeatureGroup();
 		// });	
     });
 	
-	// Muss noch umgeschrieben bzw. bearbeitet werden für OverpassAPI
+	//Muss noch umgeschrieben bzw. bearbeitet werden für OverpassAPI
 	jQuery("#btn_bos").click(function(){
 
-		var query_point = create_fireIcon_marker(); 					//Funktion zur Erstellung eines json
-		var url_bos_standorte = "http://localhost:8099/Overpass_API"; 	//Adresse des MicroServices
+	//	var query_point = create_fireIcon_marker(); 					//Funktion zur Erstellung eines json
+	//	var url_bos_standorte = "http://localhost:8099/Overpass_API"; 	//Adresse des MicroServices
 		
 		
-		jQuery.ajax({
-			type: 'GET', 												//Übergabetyp:POST
-			dataType: 'jsonp', 											//Übergabe erfolgt im jsonp-Format
-			url: url_bos_standorte, 									//Adresse des MicroServices (oben)
-			crossDomain : true,											//damit er auch auf andere Server zugreifen kann
-			data: query_point,											//Hier muss glaube ich (String keyword, BOS bos) rein??
-			xhrFields: { withCredentials: true},
-			success: function(data_point){								//Ergebnisverarbeitung					
-				console.log(JSON.stringify(data_point));				//in Console wird Rückgabe in String umgewandelt
-				geojsonLayer = L.geoJson(data_point).addTo(map);		//Anzeige in Map
-			}
-		})		
-    });
-	
+	//	jQuery.ajax({
+	//		type: 'GET', 												//Übergabetyp:Get
+	//		dataType: 'jsonp', 											//Übergabe erfolgt im jsonp-Format
+	//		url: url_bos_standorte, 									//Adresse des MicroServices (oben)
+	//		crossDomain : true,											//damit er auch auf andere Server zugreifen kann
+	//		data: '?callback=xxx&interest=fire_station'+query_point,	
+	//		xhrFields: { withCredentials: true},
+	//		success: function(data_point){								//Ergebnisverarbeitung					
+	//			console.log(JSON.stringify(data_point));				//in Console wird Rückgabe in String umgewandelt
+				
+	//			for (var fire_marker in places){
+	//				var marker = new L.marker([getLat(), getLon()],{icon: fireIcon});
+	//				markerList.addLayer(marker);
+	//			}
+	//			map.addLayer(markerList);
+	//		}
+	//	})		
+  
+		
 	
 		var fireIcon = L.icon({
 			iconUrl: 'marker/firetruck.svg',
@@ -95,27 +100,16 @@ var markerList = new L.FeatureGroup();
 			popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 		});
 	
-		
-		
-		
-		//var marker = new L.marker([51.289, 9.42626],{icon: fireIcon});
-		//var marker2 = new L.marker([50.789, 9.82626],{icon: fireIcon});
-		//markerList.addLayer(marker);
-		//markerList.addLayer(marker2);
-		//map.addLayer(markerList);
+		var marker = new L.marker([51.289, 9.42626],{icon: fireIcon});
+		var marker2 = new L.marker([50.789, 9.82626],{icon: fireIcon});
+		markerList.addLayer(marker);
+		markerList.addLayer(marker2);
+		map.addLayer(markerList);
     });
 	
-	// Muss noch umgeschrieben bzw. bearbeitet werden für OverpassAPI
-	function create_fireIcon_marker(){									//Erstellen der json-Übergabedatei
-			var keyword = 'fire_station';								//Einzelne Variablen
-			var south = ;
-			var west = ;
-			var north = ;
-			var east = ;
-			
-			JSON.stringify({keyword, south, west, north, east}];		//Konvertierung zum json		
-    });
-
+	
+	
+	
 	
 	
 	jQuery("#btn_polygon").click(function(){
@@ -175,22 +169,54 @@ function get_map(){
     }).addTo(map);
 }
 
+//Muss noch umgeschrieben bzw. bearbeitet werden für OverpassAPI
+//function create_fireIcon_marker(){
+//	var temp = new Object();
+		
+//		south = {};
+//		west = {};
+//		north = {};
+//		east = {};
+		
+//		south = 49.9221; //bbox[0]
+//		west = 8.0842; //bbox[2]
+//		north = 50.0972; //bbox[1]
+//		east = 8.4584; //bbox[3]
+		
+//		temp = '&south='+south+'&west='+west+'&north='+north+'&east='+east;
+		
+//	var jsonpString = JSON.stringify(temp);
+//	return jsonpString;
+//}
+
 
 function create_obj_poly(){
-	jQuery.ajax({
-			type: 'POST',
-			 headers: { 
-				 'Accept': 'application/json',
-				 'Content-Type': 'application/json', 
-			 },			
-			dataType: 'json',
-			url: url_isochrone,
-			crossDomain : true,
-			data: query_poly,
-			success: function(data_poly){
-				console.log(JSON.stringify(data_poly));
-				geojsonLayer = L.geoJson(data_poly).addTo(map);
+	var obj = new Object();
+		obj.timelimit = slider_data;
+		bos = [];
+		
+		var i = 0;
+		for (var fire_marker in markerList._layers){
+		
+			if (fire_marker._latlng !== null) {
+				bos_item = {};
+				
+				coord_item = {};
+				
+				coord_item['lat'] = markerList._layers[fire_marker]._latlng.lat;
+				coord_item['lng'] = markerList._layers[fire_marker]._latlng.lng;
+				
+				bos_item = coord_item;
+				
+				bos.push(bos_item);
+		
+				i++;
 			}
-		})		
-    });
+			
+		};
+		
+		obj.bos = bos;
+
+	var jsonString = JSON.stringify(obj);
+	return jsonString;
 }
