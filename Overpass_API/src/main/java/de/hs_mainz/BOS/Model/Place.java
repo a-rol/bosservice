@@ -4,7 +4,7 @@ public class Place {
 	
 	private String type;
 	
-	//private int id;
+	private String id;
 	
 	private double lat;
 	
@@ -18,12 +18,12 @@ public class Place {
 	public void setType(String type) {
 		this.type = type;
 	}
-	/*public int getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
-	}*/
+	}
 	public double getLat() {
 		return lat;
 	}

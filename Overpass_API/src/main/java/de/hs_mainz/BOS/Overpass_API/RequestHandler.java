@@ -37,10 +37,10 @@ public class RequestHandler {
 		if(callback.isEmpty() || callback == null)
 			return response;
 		else
-			return callback + "'" + response + "'";
+			return callback + ";'" + response + "'";
 	}
 	
-	public ArrayList<Place> getRelevantBOS(String interest, Double south, Double west, Double north, Double east) {
+	public ArrayList<Place> getRelevantBOS(String interest, Double south, Double west, Double north, Double east)  {
 		BOS bos = new BOS();
 		bos.setInterest(interest);
 		bos.setSouth(south);

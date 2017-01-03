@@ -19,7 +19,7 @@ public class OverpassAPI {
 	
 	private static final String PLACES_API_BASE ="http://overpass-api.de/api/interpreter?data=[out:json];";
 	
-	public ArrayList<Place> search(String keyword, BOS bos) {
+	public ArrayList<Place> search(String keyword, BOS bos)  {
 		
 		String requestStart = buildRequest(keyword, bos);
 		
@@ -34,7 +34,7 @@ public class OverpassAPI {
 		} else {
 			for (Place place : places) {
 				//System.out.println(place.getType());
-				//System.out.println(place.getId());
+				System.out.println(place.getId());
 				System.out.println(place.getLat());
 				System.out.println(place.getLon());
 				//System.out.println(place.getTags().getAmenity());
@@ -45,7 +45,7 @@ public class OverpassAPI {
 		return places;
 	}
 
-	public String buildRequest(String keyword, BOS bos) {
+	public String buildRequest(String keyword, BOS bos)  {
 		String requestUri = "";
 		String bbox = String.valueOf(bos.getSouth()) + "," + String.valueOf(bos.getWest()) + "," + String.valueOf(bos.getNorth()) + "," + String.valueOf(bos.getEast());
 		StringBuilder sb = new StringBuilder(PLACES_API_BASE);
