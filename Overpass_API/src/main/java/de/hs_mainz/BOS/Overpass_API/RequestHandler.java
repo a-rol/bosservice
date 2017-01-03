@@ -30,7 +30,7 @@ public class RequestHandler {
 		ArrayList<Place> allBOS = getRelevantBOS(interest, Double.parseDouble(south), Double.parseDouble(west), Double.parseDouble(north), Double.parseDouble(east));
 		ResponseHandler responseHandler = new ResponseHandler();
 		String response = responseHandler.getResponse(allBOS);
-		return response;
+		return adCallback(callback, response);
 	}
 	
 	public String adCallback(String callback, String response) {
