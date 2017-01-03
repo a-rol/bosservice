@@ -31,13 +31,14 @@ public class RequestHandler {
 		ResponseHandler responseHandler = new ResponseHandler();
 		String response = responseHandler.getResponse(allBOS);
 		return adCallback(callback, response);
+		
 	}
 	
 	public String adCallback(String callback, String response) {
 		if(callback.isEmpty() || callback == null)
 			return response;
 		else
-			return callback + ";'" + response + "'";
+			return callback + "('" + response + "')";
 	}
 	
 	public ArrayList<Place> getRelevantBOS(String interest, Double south, Double west, Double north, Double east)  {
