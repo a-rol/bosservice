@@ -17,7 +17,7 @@ public class RequestHandler {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String get(@QueryParam("callback") String callback, @QueryParam("interest") String interest, @QueryParam("south") String south, @QueryParam("west") String west, @QueryParam("north") String north, @QueryParam("east") String east) throws NumberFormatException, UnsupportedEncodingException {
+	public String get(@QueryParam("callback") String callback, @QueryParam("interest") String interest, @QueryParam("south") String south, @QueryParam("west") String west, @QueryParam("north") String north, @QueryParam("east") String east) {
 		System.out.println(callback);
 		System.out.println(interest);
 		System.out.println(south);
@@ -40,7 +40,7 @@ public class RequestHandler {
 			return callback + "'" + response + "'";
 	}
 	
-	public ArrayList<Place> getRelevantBOS(String interest, Double south, Double west, Double north, Double east) throws UnsupportedEncodingException {
+	public ArrayList<Place> getRelevantBOS(String interest, Double south, Double west, Double north, Double east) {
 		BOS bos = new BOS();
 		bos.setInterest(interest);
 		bos.setSouth(south);

@@ -19,7 +19,7 @@ public class OverpassAPI {
 	
 	private static final String PLACES_API_BASE ="http://overpass-api.de/api/interpreter?data=[out:json];";
 	
-	public ArrayList<Place> search(String keyword, BOS bos) throws UnsupportedEncodingException {
+	public ArrayList<Place> search(String keyword, BOS bos) {
 		
 		String requestStart = buildRequest(keyword, bos);
 		
@@ -45,7 +45,7 @@ public class OverpassAPI {
 		return places;
 	}
 
-	public static String buildRequest(String keyword, BOS bos) throws UnsupportedEncodingException {
+	public String buildRequest(String keyword, BOS bos) {
 		String requestUri = "";
 		String bbox = String.valueOf(bos.getSouth()) + "," + String.valueOf(bos.getWest()) + "," + String.valueOf(bos.getNorth()) + "," + String.valueOf(bos.getEast());
 		StringBuilder sb = new StringBuilder(PLACES_API_BASE);
@@ -58,7 +58,7 @@ public class OverpassAPI {
 		
 	}
 
-	public static InputStreamReader postQuery(String request, InputStreamReader in) {
+	public InputStreamReader postQuery(String request, InputStreamReader in) {
 	
 		URL url = null;
 		HttpURLConnection conn;
