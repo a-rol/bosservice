@@ -76,32 +76,27 @@ var markerList = new L.FeatureGroup();
 			data: 'interest='+query_intrest+'&south='+south_koord+'&west='+west_koord+'&north='+north_koord+'&east='+east_koord+'',
 			xhrFields: { withCredentials: true},
 			success: function(data_point){								//Ergebnisverarbeitung					
-				console.log(data_point);				//in Console wird Rückgabe in String umgewandelt
+				var data_point =  JSON.parse(data_point);	
+			
+				var fireIcon = L.icon({
+						iconUrl: 'marker/firetruck.svg',
+						iconSize:     [38, 95], // size of the icon
+						shadowSize:   [50, 64], // size of the shadow
+						iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+						shadowAnchor: [4, 62],  // the same for the shadow
+						popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+					});
 				
-				// for (var fire_marker in places){
-					// var marker = new L.marker([getLat(), getLon()],{icon: fireIcon});
-					// markerList.addLayer(marker);
-				// }
-				// map.addLayer(markerList);
+				for (var coord in data_point.features){
+					long_fire = data_point.features[coord].geometry.coordinates[0];
+					lat_fire = data_point.features[coord].geometry.coordinates[1];
+					
+					var marker = new L.marker([lat_fire, long_fire],{icon: fireIcon});
+					markerList.addLayer(marker);
+				}
+				map.addLayer(markerList);
 			}
-		})		
-  
-		
-	
-		var fireIcon = L.icon({
-			iconUrl: 'marker/firetruck.svg',
-			iconSize:     [38, 95], // size of the icon
-			shadowSize:   [50, 64], // size of the shadow
-			iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-			shadowAnchor: [4, 62],  // the same for the shadow
-			popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-		});
-	
-		// var marker = new L.marker([51.289, 9.42626],{icon: fireIcon});
-		// var marker2 = new L.marker([50.789, 9.82626],{icon: fireIcon});
-		// markerList.addLayer(marker);
-		// markerList.addLayer(marker2);
-		// map.addLayer(markerList);
+		})			
     });
 	
 	
