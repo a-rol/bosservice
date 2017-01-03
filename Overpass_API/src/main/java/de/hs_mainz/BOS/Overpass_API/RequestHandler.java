@@ -16,7 +16,7 @@ import de.hs_mainz.BOS.Model.BOS;
 public class RequestHandler {
 
 	@GET
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
 	public String get(@QueryParam("callback") String callback, @QueryParam("interest") String interest, @QueryParam("south") String south, @QueryParam("west") String west, @QueryParam("north") String north, @QueryParam("east") String east) throws NumberFormatException, UnsupportedEncodingException {
 		System.out.println(callback);
 		System.out.println(interest);

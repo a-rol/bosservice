@@ -4,7 +4,6 @@ var slider_data;
 var markerList = new L.FeatureGroup();
 
 
-
  jQuery(document).ready(function(){
 
 	jQuery(".slider").slider({
@@ -51,43 +50,41 @@ var markerList = new L.FeatureGroup();
 			success: function(data_geocoder){
 				long_mapcenter = data_geocoder.features[0].geometry.coordinates[0];
 				lat_mapcenter = data_geocoder.features[0].geometry.coordinates[1];
+				
 				map.setView(new L.LatLng(lat_mapcenter, long_mapcenter), 10);
 			}
 		})
-		// .done(function( data ) {
-			// console.log("done");
-			// console.log(data);
-		// })
-		// .fail( function(xhr, textStatus, errorThrown) {
-			// console.log(xhr);
-			// alert(textStatus);
-		// });	
     });
 	
 	//Muss noch umgeschrieben bzw. bearbeitet werden für OverpassAPI
 	jQuery("#btn_bos").click(function(){
 
-	//	var query_point = create_fireIcon_marker(); 					//Funktion zur Erstellung eines json
-	//	var url_bos_standorte = "http://localhost:8099/Overpass_API"; 	//Adresse des MicroServices
+		var url_bos_standorte = "http://localhost:8099/Overpass_API";				//Adresse des MicroServices
+		var query_intrest = "fire_station";
+		
+		var east_koord = map.getBounds().getEast();
+		var west_koord = map.getBounds().getWest();
+		var south_koord = map.getBounds().getSouth();
+		var north_koord = map.getBounds().getNorth();
 		
 		
-	//	jQuery.ajax({
-	//		type: 'GET', 												//Übergabetyp:Get
-	//		dataType: 'jsonp', 											//Übergabe erfolgt im jsonp-Format
-	//		url: url_bos_standorte, 									//Adresse des MicroServices (oben)
-	//		crossDomain : true,											//damit er auch auf andere Server zugreifen kann
-	//		data: '?callback=xxx&interest=fire_station'+query_point,	
-	//		xhrFields: { withCredentials: true},
-	//		success: function(data_point){								//Ergebnisverarbeitung					
-	//			console.log(JSON.stringify(data_point));				//in Console wird Rückgabe in String umgewandelt
+		jQuery.ajax({
+			type: 'GET', 												//Übergabetyp:Get
+			dataType: 'jsonp', 											//Übergabe erfolgt im jsonp-Format
+			url: url_bos_standorte, 									//Adresse des MicroServices (oben)
+			crossDomain: true,											//damit er auch auf andere Server zugreifen kann
+			data: 'interest='+query_intrest+'&south='+south_koord+'&west='+west_koord+'&north='+north_koord+'&east='+east_koord+'',
+			xhrFields: { withCredentials: true},
+			success: function(data_point){								//Ergebnisverarbeitung					
+				console.log(data_point);				//in Console wird Rückgabe in String umgewandelt
 				
-	//			for (var fire_marker in places){
-	//				var marker = new L.marker([getLat(), getLon()],{icon: fireIcon});
-	//				markerList.addLayer(marker);
-	//			}
-	//			map.addLayer(markerList);
-	//		}
-	//	})		
+				// for (var fire_marker in places){
+					// var marker = new L.marker([getLat(), getLon()],{icon: fireIcon});
+					// markerList.addLayer(marker);
+				// }
+				// map.addLayer(markerList);
+			}
+		})		
   
 		
 	
@@ -100,11 +97,11 @@ var markerList = new L.FeatureGroup();
 			popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 		});
 	
-		var marker = new L.marker([51.289, 9.42626],{icon: fireIcon});
-		var marker2 = new L.marker([50.789, 9.82626],{icon: fireIcon});
-		markerList.addLayer(marker);
-		markerList.addLayer(marker2);
-		map.addLayer(markerList);
+		// var marker = new L.marker([51.289, 9.42626],{icon: fireIcon});
+		// var marker2 = new L.marker([50.789, 9.82626],{icon: fireIcon});
+		// markerList.addLayer(marker);
+		// markerList.addLayer(marker2);
+		// map.addLayer(markerList);
     });
 	
 	
@@ -140,19 +137,8 @@ var markerList = new L.FeatureGroup();
 		geojsonLayer.clearLayers();
     });
 	
-	map.on('moveend', function() {
-		map_east = map.getBounds().getEast();
-
-		
-		// prüfen ob die koord im map rechteck ist 
-		// if(map.getBounds().contains([parseFloat(latitude), parseFloat(longitude)]) == true){
-			// Hier kommt die prüfung rein!
-		// }
-	});
-	
-	
 	map.on('zoomend', function() {
-		alert(map.getZoom());
+		//alert(map.getZoom());
 	});
 		
 });	
@@ -168,26 +154,6 @@ function get_map(){
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors | &copy; SEng Gruppe 1'
     }).addTo(map);
 }
-
-//Muss noch umgeschrieben bzw. bearbeitet werden für OverpassAPI
-//function create_fireIcon_marker(){
-//	var temp = new Object();
-		
-//		south = {};
-//		west = {};
-//		north = {};
-//		east = {};
-		
-//		south = 49.9221; //bbox[0]
-//		west = 8.0842; //bbox[2]
-//		north = 50.0972; //bbox[1]
-//		east = 8.4584; //bbox[3]
-		
-//		temp = '&south='+south+'&west='+west+'&north='+north+'&east='+east;
-		
-//	var jsonpString = JSON.stringify(temp);
-//	return jsonpString;
-//}
 
 
 function create_obj_poly(){
