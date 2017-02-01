@@ -1,3 +1,7 @@
+ /* @author Alexander Rolwes */
+ /* @since 07.12.2016 */
+
+
 html,body,.container{
     height:100%;
 }
@@ -29,7 +33,6 @@ html,body,.container{
 	width: 50%;
 	margin-left: 25%;
 	margin-right: 25%
-
 }
 
 .btn_search{
@@ -55,6 +58,24 @@ html,body,.container{
 	padding: 7px !important;
 }
 
+.legend_gesamt{
+	height: 80%;
+	padding-top: 7px;;
+}
+
+.legend_1{
+	height: 50%;
+}
+
+.legend_2{
+	height: 50%;
+}
+
+.label_legend{
+
+	padding-left: 5px;;
+}
+
 .col-map{
 	padding: 0px !important;
 	height:100%;
@@ -64,7 +85,7 @@ html,body,.container{
 
 .col-sidebar{
 	padding: 0px !important;
-	height:100%;
+	height: 100%;
 	border-right-style: solid;
 	border-width: 3px;
 	border-color:grey;

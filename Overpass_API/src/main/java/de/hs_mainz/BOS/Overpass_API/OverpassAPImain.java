@@ -13,7 +13,7 @@ import org.glassfish.jersey.server.ResourceConfig;
  */
 public class OverpassAPImain 
 {
-	public static final String BASE_URI = "http://localhost:8099/";
+	public static final String BASE_URI = "http://localhost:8050/";
 	
 	@SuppressWarnings("deprecation")
 	public static void main( String[] args) throws IOException {
