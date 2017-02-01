@@ -5,10 +5,12 @@
 var map;
 var slider_data;
 var markerList = new L.FeatureGroup();
+var bool_geojsonLayer = false;
 
 
  jQuery(document).ready(function(){
-
+	jQuery("#btn_polygon").prop('disabled', true);
+	jQuery("#btn_delete").prop('disabled', true);
     jQuery(".slider").slider({
         max: 25,
         min: 5,
@@ -57,7 +59,6 @@ var markerList = new L.FeatureGroup();
         })
     });
     
-    //Muss noch umgeschrieben bzw. bearbeitet werden für OverpassAPI
     jQuery("#btn_bos").click(function(){
 
         var url_bos_standorte = "http://localhost:8050/Overpass_API";     //Adresse des MicroServices
@@ -70,7 +71,7 @@ var markerList = new L.FeatureGroup();
         
         
         jQuery.ajax({
-            type: 'GET',           //Übergabetyp:Get
+            type: 'GET',           		 //Übergabetyp: Get
             dataType: 'jsonp',           //Übergabe erfolgt im jsonp-Format
             url: url_bos_standorte,      //Adresse des MicroServices (oben)
             crossDomain: true,           //damit er auch auf andere Server zugreifen kann
@@ -78,24 +79,30 @@ var markerList = new L.FeatureGroup();
             xhrFields: { withCredentials: true},
             success: function(data_point){    //Ergebnisverarbeitung
                  var data_point =  JSON.parse(data_point);	
-            
-                 var fireIcon = L.icon({
-                 iconUrl: 'marker/firetruck.svg',
-                 iconSize:     [38, 95], // size of the icon
-                 shadowSize:   [50, 64], // size of the shadow
-                 iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-                 shadowAnchor: [4, 62],  // the same for the shadow
-                 popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-                 });
-                 
-                 for (var coord in data_point.features){
-                     long_fire = data_point.features[coord].geometry.coordinates[0];
-                     lat_fire = data_point.features[coord].geometry.coordinates[1];
-                     
-                     var marker = new L.marker([lat_fire, long_fire],{icon: fireIcon});
-                     markerList.addLayer(marker);
-                 }
-                 map.addLayer(markerList);
+				 
+				 if (data_point.features.length > 0){
+					var fireIcon = L.icon({
+					iconUrl: 'marker/firetruck.svg',
+					iconSize:     [38, 38], // size of the icon
+					// shadowSize:   [0, 0], // size of the shadow
+					iconAnchor:   [19, 19], // point of the icon which will correspond to marker's location
+					// shadowAnchor: [4, 62],  // the same for the shadow
+					// popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+					});
+					for (var coord in data_point.features){
+						long_fire = data_point.features[coord].geometry.coordinates[0];
+						lat_fire = data_point.features[coord].geometry.coordinates[1];
+						var marker = new L.marker([lat_fire, long_fire],{icon: fireIcon});
+						markerList.addLayer(marker);
+					}
+					map.addLayer(markerList); 
+					jQuery("#btn_polygon").prop('disabled', false);
+					jQuery("#btn_delete").prop('disabled', false);
+				}else{
+					document.getElementById('modal_header_alert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
+					document.getElementById('modal_body_alert').innerHTML =  "<div class='info_content'>In dem von Ihnen ausgewählten Bereich stehen keine BOS-Standorte zur Verfügung. Bitte verändern Sie Ihren Kartenausschnitt und führen Sie eine erneute Suchanfrage durch.</div>";
+					jQuery("#modal_alert").modal();
+				}	 	 
             }
        })
     });
@@ -107,26 +114,38 @@ var markerList = new L.FeatureGroup();
         var url_isochrone = "http://localhost:8085/isochrone";
         
         jQuery.ajax({
-        type: 'POST',
-        headers: { 
-        'Accept': 'application/json',
-        'Content-Type': 'application/json', 
-        },
-        dataType: 'json',
-        url: url_isochrone,
-        crossDomain : true,
-        data: query_poly,
-        success: function(data_poly){
-            console.log(JSON.stringify(data_poly));
-            geojsonLayer = L.geoJson(data_poly).addTo(map);
-        }
+			type: 'POST',
+			headers: { 
+				'Accept': 'application/json',
+				'Content-Type': 'application/json', 
+			},
+			dataType: 'json',
+			url: url_isochrone,
+			crossDomain : true,
+			data: query_poly,
+			success: function(data_poly){
+				// console.log(JSON.stringify(data_poly));
+				// alert(data_poly);
+				// if (JSON.stringify(data_poly).length == 0){
+					// alert("nooothing");
+				// }else if (data_poly == "error"){
+					// alert("error");
+				// }else{
+					geojsonLayer = L.geoJson(data_poly).addTo(map);
+					bool_geojsonLayer = true;
+				// }
+			}
         })   
     });
     
     
     jQuery("#btn_delete").click(function(){
         markerList.clearLayers();
-        geojsonLayer.clearLayers();
+		jQuery("#btn_polygon").prop('disabled', true);
+		jQuery("#btn_delete").prop('disabled', true);
+		if (bool_geojsonLayer == true){
+			geojsonLayer.clearLayers();
+		}
     });
     
     map.on('zoomend', function() {
