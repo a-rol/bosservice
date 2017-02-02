@@ -15,7 +15,7 @@ public class call_IsochroneAPI {
 	public static String URLConnectionReader(InputJSON InputJSON) {
 		try{
    
-			//Variante für die Abfrage eines Polygone von der IsochroneAPI --> direkte Weitergabe
+			//Variante für die Abfrage eines Polygone von der IsochroneAPI
 	        if (InputJSON.getCoordinates().size() == 1){
 	        	
 	        	List<String> UrlList = buildUrlList(InputJSON);
