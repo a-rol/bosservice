@@ -13,7 +13,7 @@ import com.sun.net.httpserver.HttpServer;
  
  
 @SuppressWarnings("restriction")
-public class JerseyEmbeddedHTTPServer {
+public class Main {
  
     public static void main(String[] args) throws IOException {
         System.out.println("Starting HTTPServer...\n");
@@ -31,8 +31,10 @@ public class JerseyEmbeddedHTTPServer {
     }
  
     private static URI getURI() {
+    	//local Version
         return UriBuilder.fromUri("http://localhost/").port(8085).build();
-
+        //Server Version
+    	//return UriBuilder.fromUri("http://143.93.114.120/").port(8085).build();
     }
  
 }
