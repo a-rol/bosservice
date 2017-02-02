@@ -1,4 +1,4 @@
-
+﻿
 // @author Alexander Rolwes
 // @since 07.12.2016
 
@@ -65,7 +65,7 @@ var bool_geojsonLayer = false, bool_markerList = false;
     
     jQuery("#btn_bos").click(function(){
 		
-        var url_bos_standorte = "http://localhost:8050/Overpass_API";     //Adresse des MicroServices
+        var url_bos_standorte = "http://localhost:8050/overpassAPI";     //Adresse des MicroServices
         var query_intrest = "fire_station";
         
 		if (bool_geojsonLayer == true){
