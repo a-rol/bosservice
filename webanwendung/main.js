@@ -5,7 +5,7 @@
 var map;
 var slider_data;
 var markerList = new L.FeatureGroup();
-var bool_geojsonLayer = false;
+var bool_geojsonLayer = false, bool_markerList = false;
 
 
  jQuery(document).ready(function(){
@@ -26,8 +26,6 @@ var bool_geojsonLayer = false;
         suffix: "Min.",
     });
     slider_data = jQuery( ".slider" ).slider( "value" ); //der Startwert wird der Variablen slider_number_last_dates hinzugefügt
-    // alert(slider_data);
-    // Karte anzeigen lassen
     get_map();
     
     
@@ -42,7 +40,7 @@ var bool_geojsonLayer = false;
         
         var search_data = jQuery("#form_adress").val();
         var url_geocoder = "http://localhost:8080/pubapp/geocoder";
-        
+       
         jQuery.ajax({
             type: 'GET',
             dataType: 'jsonp',
@@ -51,35 +49,47 @@ var bool_geojsonLayer = false;
             data: 'queryString='+search_data+'&locale=de',
             xhrFields: { withCredentials: true},
             success: function(data_geocoder){
-                long_mapcenter = data_geocoder.features[0].geometry.coordinates[0];
-                lat_mapcenter = data_geocoder.features[0].geometry.coordinates[1];
+				if (data_geocoder.features.length > 0){
+					long_mapcenter = data_geocoder.features[0].geometry.coordinates[0];
+					lat_mapcenter = data_geocoder.features[0].geometry.coordinates[1];
                 
-                map.setView(new L.LatLng(lat_mapcenter, long_mapcenter), 10);
+					map.setView(new L.LatLng(lat_mapcenter, long_mapcenter), 10);
+				}else{
+					document.getElementById('modal_header_alert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
+					document.getElementById('modal_body_alert').innerHTML =  "<div class='info_content'>Die von Ihnen eingegeben Adresse ist fehlerhaft. Es konnte kein passender Ort zugeordnet werden. Bitte verändern Sie Ihren Eingabe und führen Sie eine erneute Suchanfrage durch.</div>";
+					jQuery("#modal_alert").modal();
+				}    
             }
         })
     });
     
     jQuery("#btn_bos").click(function(){
-
+		
         var url_bos_standorte = "http://localhost:8050/Overpass_API";     //Adresse des MicroServices
         var query_intrest = "fire_station";
         
+		if (bool_geojsonLayer == true){
+			geojsonLayer.clearLayers();
+		};
+		if (bool_markerList == true){
+			markerList.clearLayers();
+		};
+		
         var east_koord = map.getBounds().getEast();
         var west_koord = map.getBounds().getWest();
         var south_koord = map.getBounds().getSouth();
         var north_koord = map.getBounds().getNorth();
-        
-        
-        jQuery.ajax({
+		
+		jQuery.ajax({
+			timeout: 15000,
             type: 'GET',           		 //Übergabetyp: Get
             dataType: 'jsonp',           //Übergabe erfolgt im jsonp-Format
             url: url_bos_standorte,      //Adresse des MicroServices (oben)
             crossDomain: true,           //damit er auch auf andere Server zugreifen kann
             data: 'interest='+query_intrest+'&south='+south_koord+'&west='+west_koord+'&north='+north_koord+'&east='+east_koord+'',
-            xhrFields: { withCredentials: true},
+            xhrFields: {withCredentials: true},
             success: function(data_point){    //Ergebnisverarbeitung
                  var data_point =  JSON.parse(data_point);	
-				 
 				 if (data_point.features.length > 0){
 					var fireIcon = L.icon({
 					iconUrl: 'marker/firetruck.svg',
@@ -96,6 +106,7 @@ var bool_geojsonLayer = false;
 						markerList.addLayer(marker);
 					}
 					map.addLayer(markerList); 
+					bool_markerList = true;
 					jQuery("#btn_polygon").prop('disabled', false);
 					jQuery("#btn_delete").prop('disabled', false);
 				}else{
@@ -103,17 +114,25 @@ var bool_geojsonLayer = false;
 					document.getElementById('modal_body_alert').innerHTML =  "<div class='info_content'>In dem von Ihnen ausgewählten Bereich stehen keine BOS-Standorte zur Verfügung. Bitte verändern Sie Ihren Kartenausschnitt und führen Sie eine erneute Suchanfrage durch.</div>";
 					jQuery("#modal_alert").modal();
 				}	 	 
-            }
+            },
+			error: function(){
+				document.getElementById('modal_header_alert').innerHTML = "<h4 class='modal-title'>Achtung! Die maximale Wartezeit wurde überschritten!</h4>";
+				document.getElementById('modal_body_alert').innerHTML =  "<div class='info_content'>In dem von Ihnen ausgewählten Bereich stehen eine Vielzahl an BOS-Standorte zur Verfügung. Bitte verkleinern Sie Ihren Kartenausschnitt und führen Sie eine erneute Suchanfrage durch.</div>";
+				jQuery("#modal_alert").modal();
+			}
        })
     });
-
 
     jQuery("#btn_polygon").click(function(){
         var query_poly = create_obj_poly();
     
         var url_isochrone = "http://localhost:8085/isochrone";
         
+		if (bool_geojsonLayer == true){
+			geojsonLayer.clearLayers();
+		};
         jQuery.ajax({
+			timeout: 15000,
 			type: 'POST',
 			headers: { 
 				'Accept': 'application/json',
@@ -134,6 +153,11 @@ var bool_geojsonLayer = false;
 					geojsonLayer = L.geoJson(data_poly).addTo(map);
 					bool_geojsonLayer = true;
 				// }
+			},
+			error: function(){
+				document.getElementById('modal_header_alert').innerHTML = "<h4 class='modal-title'>Achtung! Die maximale Wartezeit wurde überschritten!</h4>";
+				document.getElementById('modal_body_alert').innerHTML =  "<div class='info_content'>In dem von Ihnen ausgewählten Bereich stehen eine Vielzahl an BOS-Standorte zur Verfügung. Eine Abfrage des Erreichbarkeitspolygons kann nicht ausgeführt werden. <br>Bitte verkleinern Sie Ihren Kartenausschnitt oder verändern Sie ihre Zeitliche Hilfsfrist und führen Sie eine erneute Suchanfrage durch.</div>";
+				jQuery("#modal_alert").modal();
 			}
         })   
     });
@@ -163,23 +187,32 @@ function get_map(){
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors | &copy; SEng Gruppe 1'
     }).addTo(map);
 }
+
 function create_obj_poly(){
     var obj = new Object();
-        obj.timelimit = slider_data;
-        bos = [];
-        var i = 0;
-        for (var fire_marker in markerList._layers){
-            if (fire_marker._latlng !== null) {
-                bos_item = {};
-                coord_item = {};
-                coord_item['lat'] = markerList._layers[fire_marker]._latlng.lat;
-                coord_item['lng'] = markerList._layers[fire_marker]._latlng.lng;
-                bos_item = coord_item;
-                bos.push(bos_item);
-                i++;
-            }
-        };
-        obj.bos = bos;
+    obj.timelimit = slider_data;
+    bos = [];
+    var i = 0;
+    for (var fire_marker in markerList._layers){
+        if (fire_marker._latlng !== null) {
+			var latitude = markerList._layers[fire_marker]._latlng.lat;
+			var longitude = markerList._layers[fire_marker]._latlng.lng;
+			
+			// prüfen ob die koordinaten der marker im map rechteck sind 	
+			if(map.getBounds().contains([parseFloat(latitude), parseFloat(longitude)]) == true){
+				bos_item = {};
+				coord_item = {};
+				coord_item['lat'] = latitude;
+				coord_item['lng'] = longitude;
+				bos_item = coord_item;
+				bos.push(bos_item);
+				i++;
+			}else{
+				map.removeLayer(markerList._layers[fire_marker]);
+			}
+        }
+    };
+    obj.bos = bos;
     var jsonString = JSON.stringify(obj);
     return jsonString;
 }
