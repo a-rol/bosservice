@@ -65,7 +65,7 @@ var bool_geojsonLayer = false, bool_markerList = false;
     
     jQuery("#btn_bos").click(function(){
 		
-        var url_bos_standorte = "http://localhost:8050/overpassAPI";     //Adresse des MicroServices
+        var url_bos_standorte = "http://143.93.114.120/overpassAPI";     //Adresse des MicroServices
         var query_intrest = "fire_station";
         
 		if (bool_geojsonLayer == true){
@@ -126,7 +126,7 @@ var bool_geojsonLayer = false, bool_markerList = false;
     jQuery("#btn_polygon").click(function(){
         var query_poly = create_obj_poly();
     
-        var url_isochrone = "http://localhost:8085/isochrone";
+        var url_isochrone = "http://143.93.114.120/isochrone";
         
 		if (bool_geojsonLayer == true){
 			geojsonLayer.clearLayers();
