@@ -1,4 +1,4 @@
-package de.hs_mainz.BOS.Overpass_API;
+package de.hs_mainz.bos.overpassApi;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -7,14 +7,51 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import de.hs_mainz.BOS.Controller.OverpassAPI;
-import de.hs_mainz.BOS.Model.Place;
-import de.hs_mainz.BOS.Model.BOS;
+import de.hs_mainz.bos.controller.OverpassAPI;
+import de.hs_mainz.bos.model.Place;
+import de.hs_mainz.bos.model.BOS;
 
-@Path("Overpass_API")
+/**
+ * class for adjusting the request for the overpass API
+ * 
+ * @author Angelique
+ * @since 28.12.2016
+ */
+
+@Path("overpassAPI")
 
 public class RequestHandler {
-
+	
+    //****************************************
+    // CONSTANTS
+    //****************************************
+	
+    //****************************************
+    // VARIABLES
+    //****************************************
+	
+    //****************************************
+    // INIT/CONSTRUCTOR
+    //****************************************
+	
+    //****************************************
+    // GETTER/SETTER
+    //****************************************
+	
+    //****************************************
+    // PUBLIC METHODS
+    //****************************************
+		
+	/**
+	 * 
+	 * @param callback
+	 * @param interest
+	 * @param south
+	 * @param west
+	 * @param north
+	 * @param east
+	 * @return 
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String get(@QueryParam("callback") String callback, @QueryParam("interest") String interest, @QueryParam("south") String south, @QueryParam("west") String west, @QueryParam("north") String north, @QueryParam("east") String east) {
@@ -34,12 +71,29 @@ public class RequestHandler {
 		
 	}
 	
+	/**
+	 * 
+	 * @param callback
+	 * @param response
+	 * @return callback response
+	 */
+	
 	public String adCallback(String callback, String response) {
 		if(callback.isEmpty() || callback == null)
 			return response;
 		else
 			return callback + "('" + response + "')";
 	}
+	
+	/**
+	 * 
+	 * @param interest
+	 * @param south
+	 * @param west
+	 * @param north
+	 * @param east
+	 * @return ArrayList of all BOS found in a given area (bbox with south, west, north and east)
+	 */
 	
 	public ArrayList<Place> getRelevantBOS(String interest, Double south, Double west, Double north, Double east)  {
 		BOS bos = new BOS();
@@ -54,5 +108,13 @@ public class RequestHandler {
 		ArrayList<Place> allBOS = OverpassAPI.search(interest, bos);
 		return allBOS;
 	}
+	
+	//****************************************
+    // PRIVATE METHODS
+    //****************************************
+	
+    //****************************************
+    // INNER CLASSES
+    //****************************************
 	
 }
