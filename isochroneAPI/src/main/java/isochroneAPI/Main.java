@@ -31,7 +31,6 @@ public class Main {
     }
  
     private static URI getURI() {
-    	
     	//local Version
         return UriBuilder.fromUri("http://localhost/").port(8085).build();
     }
