@@ -10,7 +10,7 @@ import com.sun.jersey.api.container.httpserver.HttpServerFactory;
 import com.sun.jersey.api.core.PackagesResourceConfig;
 import com.sun.jersey.api.core.ResourceConfig;
 import com.sun.net.httpserver.HttpServer;
- 
+
  
 @SuppressWarnings("restriction")
 public class Main {
