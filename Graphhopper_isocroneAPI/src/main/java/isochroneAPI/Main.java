@@ -33,8 +33,6 @@ public class Main {
     private static URI getURI() {
     	//local Version
         return UriBuilder.fromUri("http://localhost/").port(8085).build();
-        //Server Version
-    	//return UriBuilder.fromUri("http://143.93.114.120/").port(8085).build();
     }
  
 }
