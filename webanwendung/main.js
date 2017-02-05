@@ -39,7 +39,7 @@ var bool_geojsonLayer = false, bool_markerList = false;
     jQuery("#btn_search").click(function(){
         
         var search_data = jQuery("#form_adress").val();
-        var url_geocoder = "http://localhost:8080/pubapp/geocoder";
+        var url_geocoder = "http://143.93.114.139/geocoder";
        
         jQuery.ajax({
             type: 'GET',
