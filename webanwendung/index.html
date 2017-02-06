@@ -4,115 +4,110 @@
  <!-- @since 07.12.2016 -->
 
 <html lang="en">
-<head>
-	
-	<title>Standortanalyse für BOS</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-	<!--Leaflet-->
-	<link rel="stylesheet" href="css/leaflet.css">
-	<script type='text/javascript' src='js/leaflet.js'></script>
-
-	<!--Own-->
-    <link rel="stylesheet" href="css/main_style.css">
-    <script src="main.js"></script>
-
-	<!--Slider-->
-	<script type='text/javascript' src='js/jquery-ui-slider-pips.js'></script>
-	<link rel="stylesheet" type="text/css" href	="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css"/>
-	<link rel="stylesheet" type="text/css" href="css/jquery-ui-slider-pips.css">
+	<head>
+		<title>Standortanalyse für BOS</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		
-</head>
-<body>
-			
-			
-<div class="modal fade" id="modal_alert" role="dialog">
-	<div class="modal-dialog modal-lg">
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header" >
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title alert_header" id="modal_header_alert">Info</h4>
-			</div>
-			<div class="modal-body alert_body" id="modal_body_alert"></div>
-		</div>
-	</div>
-</div>	
-			
-<div class="container-fluid">
-	<div class="row row-header">
-		<div class="col-sm-10 col-header">
-			<label class="btn_at_header" style="font-size: 12pt"><span class="fa fa-filter" ></span> Welches Gebiet kann von einer Einsatzzentrale der Feuerwehr in einer vorgegebenen Zeit abgedeckt werden?</label>
-		</div>
-		<div class="col-sm-2 col-information">
-			<button type="button" class="btn btn-default btn_information btn_at_header" id="btn_information" ><span class="fa fa-info"></span> Information</button>
-			<div class="modal fade" id="modal_information" role="dialog">
-				<div class="modal-dialog modal-lg">
-					<!-- Modal content-->
-					<div class="modal-content">
-						<div class="modal-header" >
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title information_header" id="modal_header_information">Info</h4>
-						</div>
-						<div class="modal-body information_body" id="modal_body_information"></div>
-					</div>
-				</div>
-			</div>				
-		</div>
-	</div>
+		<!--Leaflet-->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	
-	<div class="row row-content">
-		<div class="col-sm-3 col-sidebar">
-
-			<div class="row-selection_bar">
-				<div class="sidebar_heading">
-					<label id="parametereinstellungen">Parametereinstellungen:</label>
-				</div>
-					<div class="form-group selection_bar">
-						<label for="form_adress">Adresssuche:</label>
-						<input type="text" class="form-control" id="form_adress" placeholder="Bitte Adresse oder PLZ eingeben">
-						<button type="button" class="btn btn-default btn_search btn_at_sidebar" id="btn_search" ><span class="fa fa-info"></span> Adresse suchen</button>
+		<!--Leaflet-->
+		<link rel="stylesheet" href="css/leaflet.css">
+		<script type='text/javascript' src='js/leaflet.js'></script>
+	
+		<!--Own Stylesheet-->
+		<link rel="stylesheet" href="css/mainStyle.css">
+		<script src="main.js"></script>
+	
+		<!--Slider-->
+		<script type='text/javascript' src='js/jquery-ui-slider-pips.js'></script>
+		<link rel="stylesheet" type="text/css" href	="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css"/>
+		<link rel="stylesheet" type="text/css" href="css/jquery-ui-slider-pips.css">		
+	</head>
+	
+	<body>					
+		<div class="modal fade" id="modal_alert" role="dialog">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header" >
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title alert_header" id="modal_header_alert">Info</h4>
 					</div>
-					<div class="form-group selection_bar">
-						<label id="zeitr_hilfsfrist">Zeitliche Hilfsfrist:</label>
-						<div class="slider zeitraum_slider" id="zeitraum_hilfsfrist"></div>
-					</div>
-				<div>
-					<button type="button" class="btn btn-default btn_bos btn_at_sidebar" id="btn_bos" ><span class="fa fa-info"></span> BOS anzeigen</button>
+					<div class="modal-body alert_body" id="modal_body_alert"></div>
 				</div>
-				<div>
-					<button type="button" class="btn btn-default btn_polygon btn_at_sidebar" id="btn_polygon" ><span class="fa fa-info"></span> Polygon berechnen</button>
-				</div>
-				<div>
-					<button type="button" class="btn btn-default btn_felete btn_at_sidebar" id="btn_delete" ><span class="fa fa-info"></span> Daten löschen</button>
-				</div>
-			</div>			
-			<div class="row-legend">
-				<div class="sidebar_heading">
-					<label id="legend">Legende:</label>	
-				</div>	
-					<div class="legend_gesamt">
-						<div class="legend_1">
-							<img src="marker/firetruck.svg" width="50px">
-							<label class="label_legend" id="legend_1">Standorte der Feuerwachen</label>
-						</div>
-						<div class="legend_2">
-							<img src="marker/polygon_legend.svg" width="50px">
-							<label class="label_legend" id="legend_2">Erreichbarkeitspolygon</label>
-						</div>
-					</div>
-			</div>			
-		</div>		
-		<div class="col-sm-9 col-map">
-			<div id="map"></div>
+			</div>
 		</div>	
-	</div>			
-</div>  
-</body>
+					
+		<div class="container-fluid">
+			<div class="row row-header">
+				<div class="col-sm-10 col-header">
+					<label class="btn-at-header" style="font-size: 12pt"><span class="fa fa-filter" ></span> Welches Gebiet kann von einer Einsatzzentrale der Feuerwehr in einer vorgegebenen Zeit abgedeckt werden?</label>
+				</div>
+				<div class="col-sm-2 col-information">
+					<button type="button" class="btn btn-default btn_information btn-at-header" id="btn_information" ><span class="fa fa-info"></span> Information</button>
+					<div class="modal fade" id="modal_information" role="dialog">
+						<div class="modal-dialog modal-lg">
+							<div class="modal-content">
+								<div class="modal-header" >
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title information-header" id="modal_header_information">Info</h4>
+								</div>
+								<div class="modal-body information-body" id="modal_body_information"></div>
+							</div>
+						</div>
+					</div>				
+				</div>
+			</div>
+			
+			<div class="row row-content">
+				<div class="col-sm-3 col-sidebar">
+					<div class="row-selection-bar">
+						<div class="sidebar-heading">
+							<label id="parametereinstellungen">Parametereinstellungen:</label>
+						</div>
+							<div class="form-group sidebar-bar">
+								<label for="form_adress">Adresssuche:</label>
+								<input type="text" class="form-control" id="form_adress" placeholder="Bitte Adresse oder PLZ eingeben">
+								<button type="button" class="btn btn-default btn-search btn-at-sidebar" id="btn-search" ><span class="fa fa-info"></span> Adresse suchen</button>
+							</div>
+							<div class="form-group sidebar-bar">
+								<label id="zeitr_hilfsfrist">Zeitliche Hilfsfrist:</label>
+								<div class="slider zeitraum-slider" id="zeitraum_hilfsfrist"></div>
+							</div>
+						<div>
+							<button type="button" class="btn btn-default btn_bos btn-at-sidebar" id="btn_bos" ><span class="fa fa-info"></span> BOS anzeigen</button>
+						</div>
+						<div>
+							<button type="button" class="btn btn-default btn_polygon btn-at-sidebar" id="btn_polygon" ><span class="fa fa-info"></span> Polygon berechnen</button>
+						</div>
+						<div>
+							<button type="button" class="btn btn-default btn_felete btn-at-sidebar" id="btn_delete" ><span class="fa fa-info"></span> Daten löschen</button>
+						</div>
+					</div>			
+					<div class="row-legend">
+						<div class="sidebar-heading">
+							<label id="legend">Legende:</label>	
+						</div>	
+							<div class="legend-gesamt">
+								<div class="legend-1">
+									<img src="marker/firetruck.svg" width="50px">
+									<label class="label-legend" id="legend-1">Standorte der Feuerwachen</label>
+								</div>
+								<div class="legend-2">
+									<img src="marker/polygonLegend.svg" width="50px">
+									<label class="label-legend" id="legend-2">Erreichbarkeitspolygon</label>
+								</div>
+							</div>
+					</div>			
+				</div>		
+				<div class="col-sm-9 col-map">
+					<div id="map"></div>
+				</div>	
+			</div>			
+		</div>  
+	</body>
 </html>
