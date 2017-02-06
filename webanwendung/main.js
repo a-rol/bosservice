@@ -148,7 +148,7 @@ var boolGeojsonErreichbarkeitspolygon = false, boolBosMarkerList = false;
 					// alert("nooothing");
 				// }else if (dataPoly == "error"){
 					// alert("error");
-				// }else{
+				// }else{ 
 					var geojsonErreichbarkeitspolygon = L.geoJson(dataPoly).addTo(map);
 					boolGeojsonErreichbarkeitspolygon = true;
 				// }
