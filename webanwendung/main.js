@@ -141,7 +141,7 @@ var geojsonErreichbarkeitspolygon;
 				// console.log(JSON.stringify(dataPoly));
 				// alert(dataPoly);
 				// if (JSON.stringify(dataPoly).length == 0){
-					// alert("nooothing");
+					// alert("noothing");
 				// }else if (dataPoly == "error"){
 					// alert("error");
 				// }else{ 
