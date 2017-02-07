@@ -34,10 +34,22 @@
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<div class="modal-header" >
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title alert_header" id="modalHeaderAlert">Info</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="false">&times;</button>
+						<h4 class="modal-title alert-header" id="modalHeaderAlert">Info</h4>
 					</div>
-					<div class="modal-body alert_body" id="modalBodyAlert"></div>
+					<div class="modal-body alert-body" id="modalBodyAlert"></div>
+				</div>
+			</div>
+		</div>	
+		
+		<div class="modal fade" id="modalProgressBar" role="dialog">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<!-- <div class="modal-header" > -->
+						<!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="false">&times;</button> -->
+						<!-- <h4 class="modal-title progress-header" id="modalHeaderProgress">Info</h4> -->
+					<!-- </div> -->
+					<div class="modal-body progress-body" id="modalBodyProgress"></div>
 				</div>
 			</div>
 		</div>	
@@ -75,8 +87,8 @@
 								<button type="button" class="btn btn-default btn-search btn-at-sidebar" id="btnSearch" ><span class="fa fa-info"></span> Adresse suchen</button>
 							</div>
 							<div class="form-group sidebar-bar">
-								<label id="zeitr_hilfsfrist">Zeitliche Hilfsfrist:</label>
-								<div class="slider zeitraum-slider" id="zeitraum_hilfsfrist"></div>
+								<label id="zeitrHilfsfrist">Zeitliche Hilfsfrist:</label>
+								<div class="slider zeitraum-slider" id="zeitraumHilfsfrist"></div>
 							</div>
 						<div>
 							<button type="button" class="btn btn-default btnBos btn-at-sidebar" id="btnBos" ><span class="fa fa-info"></span> BOS anzeigen</button>
@@ -85,7 +97,7 @@
 							<button type="button" class="btn btn-default btnPolygon btn-at-sidebar" id="btnPolygon" ><span class="fa fa-info"></span> Polygon berechnen</button>
 						</div>
 						<div>
-							<button type="button" class="btn btn-default btn_felete btn-at-sidebar" id="btnDelete" ><span class="fa fa-info"></span> Daten löschen</button>
+							<button type="button" class="btn btn-default btn-delete btn-at-sidebar" id="btnDelete" ><span class="fa fa-info"></span> Daten löschen</button>
 						</div>
 					</div>			
 					<div class="row-legend">

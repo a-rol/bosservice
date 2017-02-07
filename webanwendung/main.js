@@ -35,6 +35,7 @@ var geojsonErreichbarkeitspolygon;
 	
     jQuery("#btnSearch").click(function(){ 
         var searchData = jQuery("#formAdress").val();
+		displayProgressBar();
 		if (searchData.length > 0){
 			var urlGeocoder = "http://143.93.114.139/geocoder";
 			jQuery.ajax({
@@ -45,6 +46,7 @@ var geojsonErreichbarkeitspolygon;
 				data: 'queryString='+searchData+'&locale=de',
 				xhrFields: {withCredentials: true},
 				success: function(dataGeocoder){
+					closeProgressBar()
 					if (dataGeocoder.features.length > 0 && searchData !=""){
 						longMapcenter = dataGeocoder.features[0].geometry.coordinates[0];
 						latMapcenter = dataGeocoder.features[0].geometry.coordinates[1];
@@ -57,6 +59,7 @@ var geojsonErreichbarkeitspolygon;
 				}
 			})
 		}else{
+			closeProgressBar()
 			document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
 			document.getElementById('modalBodyAlert').innerHTML =  "<div>Das Suchformular ist leer. Bitte geben Sie eine Adresse ein.</div>";
 			jQuery("#modalAlert").modal();
@@ -75,8 +78,8 @@ var geojsonErreichbarkeitspolygon;
         var eastKoord = map.getBounds().getEast();
         var westKoord = map.getBounds().getWest();
         var southKoord = map.getBounds().getSouth();
-        var northKoord = map.getBounds().getNorth();
-		
+        var northKoord = map.getBounds().getNorth();	
+		displayProgressBar();
 		jQuery.ajax({
 			timeout: 15000,
             type: 'GET',           		 //Übergabetyp: Get
@@ -86,15 +89,13 @@ var geojsonErreichbarkeitspolygon;
             data: 'interest='+queryIntrest+'&south='+southKoord+'&west='+westKoord+'&north='+northKoord+'&east='+eastKoord+'',
             xhrFields: {withCredentials: true},
             success: function(dataPoint){    //Ergebnisverarbeitung
-                 var dataPoint =  JSON.parse(dataPoint);	
-				 if (dataPoint.features.length > 0){
+				closeProgressBar();
+				var dataPoint =  JSON.parse(dataPoint);	
+				if (dataPoint.features.length > 0){
 					var fireIcon = L.icon({
 					iconUrl: 'marker/firetruck.svg',
 					iconSize:     [38, 38], // size of the icon
-					// shadowSize:   [0, 0], // size of the shadow
 					iconAnchor:   [19, 19], // point of the icon which will correspond to marker's location
-					// shadowAnchor: [4, 62],  // the same for the shadow
-					// popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 					});
 					for (var coord in dataPoint.features){
 						var longFireStation = dataPoint.features[coord].geometry.coordinates[0];
@@ -113,6 +114,7 @@ var geojsonErreichbarkeitspolygon;
 				}	 	 
             },
 			error: function(){
+				closeProgressBar();
 				document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung! Die maximale Wartezeit wurde überschritten!</h4>";
 				document.getElementById('modalBodyAlert').innerHTML =  "<div>In dem von Ihnen ausgewählten Bereich stehen eine Vielzahl an BOS-Standorte zur Verfügung. Bitte verkleinern Sie Ihren Kartenausschnitt und führen Sie eine erneute Suchanfrage durch.</div>";
 				jQuery("#modalAlert").modal();
@@ -122,11 +124,11 @@ var geojsonErreichbarkeitspolygon;
 
     jQuery("#btnPolygon").click(function(){
         var queryPoly = createObjPoly(); 
-		// console.log(bosMarkerList);
         var urlIsochrone = "http://143.93.114.120/isochrone";        
 		if (boolGeojsonErreichbarkeitspolygon == true){
 			geojsonErreichbarkeitspolygon.clearLayers();
 		}
+		displayProgressBar();
         jQuery.ajax({
 			timeout: 15000,
 			type: 'POST',
@@ -139,6 +141,7 @@ var geojsonErreichbarkeitspolygon;
 			crossDomain : true,
 			data: queryPoly,
 			success: function(dataPoly){
+				closeProgressBar()
 				// console.log(JSON.stringify(dataPoly));
 				// alert(dataPoly);
 				// if (JSON.stringify(dataPoly).length == 0){
@@ -151,6 +154,7 @@ var geojsonErreichbarkeitspolygon;
 				// }
 			},
 			error: function(){
+				closeProgressBar()
 				document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung! Die maximale Wartezeit wurde überschritten!</h4>";
 				document.getElementById('modalBodyAlert').innerHTML =  "<div>In dem von Ihnen ausgewählten Bereich stehen eine Vielzahl an BOS-Standorte zur Verfügung. Eine Abfrage des Erreichbarkeitspolygons kann nicht ausgeführt werden. <br>Bitte verkleinern Sie Ihren Kartenausschnitt oder verändern Sie ihre Zeitliche Hilfsfrist und führen Sie eine erneute Suchanfrage durch.</div>";
 				jQuery("#modalAlert").modal();
@@ -160,6 +164,7 @@ var geojsonErreichbarkeitspolygon;
 	
     jQuery("#btnDelete").click(function(){
         bosMarkerList.clearLayers();
+		document.getElementById("formAdress").value = "";
 		jQuery("#btnPolygon").prop('disabled', true);
 		jQuery("#btnDelete").prop('disabled', true);
 		if (boolGeojsonErreichbarkeitspolygon == true){
@@ -207,4 +212,17 @@ function createObjPoly(){
     obj.bos = bos;
     var jsonString = JSON.stringify(obj);
     return jsonString;
+}
+
+function displayProgressBar(){
+	jQuery('body').css('pointer-events','none');
+	document.getElementById('modalBodyProgress').innerHTML =  "<div> <br><img src='marker/progressBar.gif'><br><br>Bitte warten, die Daten werden geladen!<br></div>";
+	jQuery("#modalProgressBar").modal({
+		keyboard: false
+	});
+}
+
+function closeProgressBar(){
+	jQuery("#modalProgressBar").modal('toggle');
+	jQuery('body').css('pointer-events','auto');
 }

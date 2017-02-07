@@ -126,3 +126,7 @@ html,body,.container{
 #map{ 
 height: 100%; 
 }
+
+.progress-body{
+	text-align: center;
+}
