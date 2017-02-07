@@ -121,7 +121,8 @@ var geojsonErreichbarkeitspolygon;
     });
 
     jQuery("#btnPolygon").click(function(){
-        var queryPoly = createObjPoly();   
+        var queryPoly = createObjPoly(); 
+		// console.log(bosMarkerList);
         var urlIsochrone = "http://143.93.114.120/isochrone";        
 		if (boolGeojsonErreichbarkeitspolygon == true){
 			geojsonErreichbarkeitspolygon.clearLayers();
@@ -141,7 +142,7 @@ var geojsonErreichbarkeitspolygon;
 				// console.log(JSON.stringify(dataPoly));
 				// alert(dataPoly);
 				// if (JSON.stringify(dataPoly).length == 0){
-					// alert("noothing");
+					// alert("nooothing");
 				// }else if (dataPoly == "error"){
 					// alert("error");
 				// }else{ 
@@ -183,7 +184,7 @@ function createObjPoly(){
     obj.timelimit = sliderData;
     var bos = [];
     var i = 0;
-    for (var fireMarker in bosMarkerList._layers){
+    for (var fireMarker in bosMarkerList._layers){	
         if (fireMarker._latlng !== null) {
 			var latitude = bosMarkerList._layers[fireMarker]._latlng.lat;
 			var longitude = bosMarkerList._layers[fireMarker]._latlng.lng;
@@ -199,6 +200,7 @@ function createObjPoly(){
 				i++;
 			}else{
 				map.removeLayer(bosMarkerList._layers[fireMarker]);
+				delete bosMarkerList._layers[fireMarker];
 			}
         }
     };
