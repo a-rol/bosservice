@@ -200,7 +200,7 @@ function createObjPoly(){
 				i++;
 			}else{
 				map.removeLayer(bosMarkerList._layers[fireMarker]);
-				delete bosMarkerList._layers[fireMarker];
+				delete bosMarkerList._layers[fireMarker]; 
 			}
         }
     };
