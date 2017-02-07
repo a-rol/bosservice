@@ -22,7 +22,6 @@ var geojsonErreichbarkeitspolygon;
     })
     .slider("pips", {
         rest: "label",
-        suffix: "Min.",
     });
     sliderData = jQuery(".slider").slider("value"); //der Startwert wird der Variablen sliderData hinzugefügt
     getMap();  
@@ -50,7 +49,7 @@ var geojsonErreichbarkeitspolygon;
 					if (dataGeocoder.features.length > 0 && searchData !=""){
 						longMapcenter = dataGeocoder.features[0].geometry.coordinates[0];
 						latMapcenter = dataGeocoder.features[0].geometry.coordinates[1];
-						map.setView(new L.LatLng(latMapcenter, longMapcenter), 10);
+						map.setView(new L.LatLng(latMapcenter, longMapcenter), 12);
 					}else{
 						document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
 						document.getElementById('modalBodyAlert').innerHTML =  "<div>Die von Ihnen eingegeben Adresse ist fehlerhaft. Es konnte kein passender Ort zugeordnet werden. Bitte verändern Sie Ihren Eingabe und führen Sie eine erneute Suchanfrage durch.</div>";
