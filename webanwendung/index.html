@@ -26,10 +26,11 @@
 		<!--Slider-->
 		<script type='text/javascript' src='js/jquery-ui-slider-pips.js'></script>
 		<link rel="stylesheet" type="text/css" href	="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css"/>
-		<link rel="stylesheet" type="text/css" href="css/jquery-ui-slider-pips.css">		
+		<link rel="stylesheet" type="text/css" href="css/jquery-ui-slider-pips.css">
 	</head>
 	
-	<body>					
+	<body>
+		<!--Modal-Popup zur Anzeige von Fehlermeldungen-->
 		<div class="modal fade" id="modalAlert" role="dialog">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
@@ -41,24 +42,23 @@
 				</div>
 			</div>
 		</div>	
-		
+		<!--Modal-Popup zur Anzeige des Ladebalkens während Anfragen an die MicroServices-->
 		<div class="modal fade" id="modalProgressBar" role="dialog">
 			<div class="modal-dialog modal-sm">
 				<div class="modal-content">
-					<!-- <div class="modal-header" > -->
-						<!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="false">&times;</button> -->
-						<!-- <h4 class="modal-title progress-header" id="modalHeaderProgress">Info</h4> -->
-					<!-- </div> -->
 					<div class="modal-body progress-body" id="modalBodyProgress"></div>
 				</div>
 			</div>
-		</div>	
-					
+		</div>
+		
+		<!--Gesamte Page-->
 		<div class="container-fluid">
+			<!--Header Bereich definieren-->
 			<div class="row row-header">
 				<div class="col-sm-10 col-header">
 					<label class="btn-at-header" style="font-size: 12pt"><span class="fa fa-filter" ></span> Welches Gebiet kann von einer Einsatzzentrale der Feuerwehr in einer vorgegebenen Zeit abgedeckt werden?</label>
 				</div>
+				<!--Informationsbutton erzeugen und Anzeigebereich im Header definieren-->
 				<div class="col-sm-2 col-information">
 					<button type="button" class="btn btn-default btnInformation btn-at-header" id="btnInformation" ><span class="fa fa-info"></span> Information</button>
 					<div class="modal fade" id="modalInformation" role="dialog">
@@ -71,55 +71,66 @@
 								<div class="modal-body information-body" id="modalBodyInformation"></div>
 							</div>
 						</div>
-					</div>				
+					</div>
 				</div>
 			</div>
-			
+			<!--Content Bereich definieren-->
 			<div class="row row-content">
+				<!--Bereich für die Seitenleiste definieren-->
 				<div class="col-sm-3 col-sidebar">
+					<!--Parametereinstellungen im oberen Seitenleistenbereich definieren-->
 					<div class="row-selection-bar">
 						<div class="sidebar-heading">
 							<label id="parametereinstellungen">Parametereinstellungen:</label>
 						</div>
+							<!--Adresssuche in Seitenleiste mittels Eingabeformular-->
 							<div class="form-group sidebar-bar">
 								<label for="formAdress">Adresssuche:</label>
 								<input type="text" class="form-control" id="formAdress" placeholder="Bitte Adresse oder PLZ eingeben">
 								<button type="button" class="btn btn-default btn-search btn-at-sidebar" id="btnSearch" ><span class="fa fa-info"></span> Adresse suchen</button>
 							</div>
+							<!--Zeitliche Hilfsfrist mittels Slider wählbar-->
 							<div class="form-group sidebar-bar">
 								<label id="zeitrHilfsfrist">Zeitliche Hilfsfrist [Min.]:</label>
 								<div class="slider zeitraum-slider" id="zeitraumHilfsfrist"></div>
 							</div>
+						<!--Button "BOS anzeigen" erzeugen-->
 						<div>
 							<button type="button" class="btn btn-default btnBos btn-at-sidebar" id="btnBos" ><span class="fa fa-info"></span> BOS anzeigen</button>
 						</div>
+						<!--Button "Polygon berechnen" erzeugen-->
 						<div>
 							<button type="button" class="btn btn-default btnPolygon btn-at-sidebar" id="btnPolygon" ><span class="fa fa-info"></span> Polygon berechnen</button>
 						</div>
+						<!--Button "Daten löschen" erzeugen-->
 						<div>
 							<button type="button" class="btn btn-default btn-delete btn-at-sidebar" id="btnDelete" ><span class="fa fa-info"></span> Daten löschen</button>
 						</div>
-					</div>			
+					</div>
+					<!--Legende im unteren Seitenleistenbereich definieren-->
 					<div class="row-legend">
 						<div class="sidebar-heading">
 							<label id="legend">Legende:</label>	
-						</div>	
+						</div>
 							<div class="legend-gesamt">
+								<!--oberer Legendenbereich-->
 								<div class="legend-1">
 									<img src="marker/firetruck.svg" width="50px">
 									<label class="label-legend" id="legend-1">Standorte der Feuerwachen</label>
 								</div>
+								<!--unterer Legendenbereich-->
 								<div class="legend-2">
 									<img src="marker/polygonLegend.svg" width="50px">
 									<label class="label-legend" id="legend-2">Erreichbarkeitspolygon</label>
 								</div>
 							</div>
-					</div>			
-				</div>		
+					</div>
+				</div>
+				<!--Kartenbereich definieren-->
 				<div class="col-sm-9 col-map">
 					<div id="map"></div>
-				</div>	
-			</div>			
+				</div>
+			</div>
 		</div>  
 	</body>
 </html>
