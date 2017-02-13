@@ -30,10 +30,8 @@ public class OverpassAPI {
 	// VARIABLES
 	// ****************************************
 
-	/** The Constant LOG_TAG. */
 	private static final String LOG_TAG = "BOS_OverpassAPI ";
 
-	/** The Constant PLACES_API_BASE. */
 	private static final String PLACES_API_BASE = "http://overpass-api.de/api/interpreter?data=[out:json];";
 
 	// ****************************************
