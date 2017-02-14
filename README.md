@@ -1,7 +1,7 @@
 # BOS-SERVICE
 
 ------
-BOS --> Blaulichtorganisationen (Feuerwehr, Polizei, Ersthelfer) [german]
+**BOS** --> Blaulichtorganisationen (Feuerwehr, Polizei, Ersthelfer) [german]
 
 translation in english: Blue light organizations (fire brigade, police, first aid)
 
@@ -12,25 +12,25 @@ Licensing information: READ LICENSE
 Project source can be downloaded from https://github.com/a-rol/bosservice
 
 ------
-Author & Contributor list
+**Author & Contributor list**
+<br />
+Angelique Pruess	*angelique.pruess@students.hs-mainz.de*
 
-Angelique Pruess	[angelique.pruess@students.hs-mainz.de]
+Alexander Rolwes 	*alexander.rolwes@students.hs-mainz.de*
 
-Alexander Rolwes 	[alexander.rolwes@students.hs-mainz.de]
+Sandro Mertens 		*sandro.mertens@students.hs-mainz.de*
 
-Sandro Mertens 		[sandro.mertens@students.hs-mainz.de]
-
-Thomas Mueller 		[thomas.mueller@students.hs-mainz.de]
+Thomas Mueller 		*thomas.mueller@students.hs-mainz.de*
 
 ------
-About the website
-
+**About the website**
+<br />
 This website is used for the visualization of known fire departments as well as the accessibility polygons 
 in a given help period in minutes.
 
 ------
-Motivation
-
+**Motivation**
+<br />
 In the context of the lecture "Software Engineering", a project entitled "Visualization of areas of
 application of the police, fire brigade or first responders" is to be realized. The aim of the 
 project is the creation of a web client for the visualization of accessibility polygons of a freely 
@@ -40,11 +40,10 @@ Our motivation for creating the web client is that all users can create free-of-
 accessibility analyzes for BOS sites.
 
 ------
-How to run file
-
+**How to run file**
+<br />
 The website can be started by entering the URL: "http://143.93.114.120/webanwendung/" with any browser.
-
-
+<br />
 Step-by-step explanation for the display of the accessibility polygons:
 
 1. Open the website
@@ -55,26 +54,26 @@ Step-by-step explanation for the display of the accessibility polygons:
 6. Selection can be deleted with the button "Daten löschen"
 
 ------
-Used libraries
-
+**Used libraries**
+<br />
 See File list
 ################################################# muss noch ergänzt werden
 ------
-File list 
-
+**File list**
+<br />
 gitignore
 
 LICENSE
 
 README-md
-
+<br />
 
 ./isochroneAPI
 
 ./overpassAPI
 
 ./webanwendung
-
+<br />
 
 /isochroneAPI:
 
@@ -119,17 +118,17 @@ InputJSON.java
 config.properties
 
 
-
+<br />
 /overpassAPI:
 
 
 
 
-
+<br />
 /webanwendung:
 
 
 
-########################################## muss ebenfalls noch verfolständigt werden
+########################################## muss ebenfalls noch vervollständigt werden
 
 ------
