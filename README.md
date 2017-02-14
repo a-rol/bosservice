@@ -1,4 +1,4 @@
-BOS-SERVICE
+# BOS-SERVICE
 
 ------
 BOS --> Blaulichtorganisationen (Feuerwehr, Polizei, Ersthelfer) [german]
@@ -14,13 +14,13 @@ Project source can be downloaded from https://github.com/a-rol/bosservice
 ------
 Author & Contributor list
 
-Angelique Pruess	angelique.pruess@students.hs-mainz.de
+Angelique Pruess	[angelique.pruess@students.hs-mainz.de]
 
-Alexander Rolwes 	alexander.rolwes@students.hs-mainz.de
+Alexander Rolwes 	[alexander.rolwes@students.hs-mainz.de]
 
-Sandro Mertens 		sandro.mertens@students.hs-mainz.de
+Sandro Mertens 		[sandro.mertens@students.hs-mainz.de]
 
-Thomas Mueller 		thomas.mueller@students.hs-mainz.de
+Thomas Mueller 		[thomas.mueller@students.hs-mainz.de]
 
 ------
 About the website
