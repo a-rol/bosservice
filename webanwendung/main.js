@@ -141,7 +141,7 @@ jQuery(document).ready(function(){
        })
     });
 	
-	// REAKTION BEI KLICK AUF DEN BUTTON "BOS anzeigen"
+	// REAKTION BEI KLICK AUF DEN BUTTON "Polygon berechnen"
     jQuery("#btnPolygon").click(function(){
         var queryPoly = createObjPoly(); 						// Abfrage fuer den MicroService durch Funktionsaufruf "createObjPoly()" erzeugen
         var urlIsochrone = "http://143.93.114.120/isochrone";	// Adresse des MicroServices
@@ -168,8 +168,8 @@ jQuery(document).ready(function(){
 			// Fehlermeldung falls die maximale Wartezeit ueberschritten wurde
 			error: function(){
 				closeProgressBar();
-				document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung! Die maximale Wartezeit wurde überschritten!</h4>";
-				document.getElementById('modalBodyAlert').innerHTML =  "<div>In dem von Ihnen ausgewählten Bereich stehen eine Vielzahl an BOS-Standorte zur Verfügung. Eine Abfrage des Erreichbarkeitspolygons kann nicht ausgeführt werden. <br>Bitte verkleinern Sie Ihren Kartenausschnitt oder verändern Sie ihre Zeitliche Hilfsfrist und führen Sie eine erneute Suchanfrage durch.</div>";
+				document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
+				document.getElementById('modalBodyAlert').innerHTML =  "<div>In dem von Ihnen ausgewählten Bereich stehen eine Vielzahl an BOS-Standorte zur Verfügung. Eine Abfrage des Erreichbarkeitspolygons kann nicht ausgeführt werden. <br>Bitte verkleinern Sie Ihren Kartenausschnitt oder verändern Sie ihre Zeitliche Hilfsfrist und führen Sie eine erneute Suchanfrage durch. Polygone können zudem nur in Deutschland erzeugt werden!</div>";
 				jQuery("#modalAlert").modal();
 			}
         })   
