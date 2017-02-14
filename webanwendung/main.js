@@ -106,7 +106,7 @@ jQuery(document).ready(function(){
             xhrFields: {withCredentials: true},
             success: function(dataPoint){				// Durchfuehrung im Erfolgsfall
 				closeProgressBar();						// Ladebalken schliessen
-				var dataPoint =  JSON.parse(dataPoint); // parsen des empfangenen JSON
+				var dataPoint =  JSON.parse(dataPoint); // parsen des empfangenen JSON				
 				if (dataPoint.features.length > 0){
 					var fireIcon = L.icon({				// neuen Icon erzeugen
 					iconUrl: 'marker/firetruck.svg',	// Icon URL
@@ -152,7 +152,7 @@ jQuery(document).ready(function(){
 		}
 		displayProgressBar();									// Ladebalken starten
         jQuery.ajax({
-			timeout: 15000,										// Festlegung der maximalen Ladezeit der AJAX-Anfrag
+			timeout: 20000,										// Festlegung der maximalen Ladezeit der AJAX-Anfrag
 			type: 'POST',										// Übergabetyp: Post
 			headers: {											// Ein Objekt mit zusaetzlichen Header-Schluessel, die zusammen mit den Anforderungen des XMLHttpRequest-Transport gesendet werden.
 				'Accept': 'application/json',
