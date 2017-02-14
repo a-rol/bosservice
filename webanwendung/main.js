@@ -39,7 +39,7 @@ jQuery(document).ready(function(){
 	// REAKTION BEI KLICK AUF DEN BUTTON "Information"
     jQuery("#btnInformation").click(function(){ 
         document.getElementById('modalHeaderInformation').innerHTML = "<h4 class='modal-title'>Information zur Webanwendung</h4>";
-        document.getElementById('modalBodyInformation').innerHTML =  "<div>Software Engineering Projekt der Hochschule Mainz - Semester 1 Master - WS 2016/2017<br><br>Verantwortlich für den Inhalt der Webseite:<br><br>Angelique Prüß, Sandro Mertens, Thomas Müller, Alexander Rolwes<br>Anfragen bitte an info@bos-erreichbarkeitsanalyse.de</div>";
+        document.getElementById('modalBodyInformation').innerHTML =  "<div>Software Engineering Projekt der Hochschule Mainz - Semester 1 Master - WS 2016/2017<br><br>Verantwortlich für den Inhalt der Webseite:<br><br>Angelique Prüß, Sandro Mertens, Thomas Müller, Alexander Rolwes<br>Anfragen bitte an angelique.pruess@students.hs-mainz.de</div>";
         jQuery("#modalInformation").modal();		// Aufruf des Bootstrap Modals
     });   
 	
@@ -129,6 +129,8 @@ jQuery(document).ready(function(){
 					document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
 					document.getElementById('modalBodyAlert').innerHTML =  "<div>In dem von Ihnen ausgewählten Bereich stehen keine BOS-Standorte zur Verfügung. Bitte verändern Sie Ihren Kartenausschnitt und führen Sie eine erneute Suchanfrage durch.</div>";
 					jQuery("#modalAlert").modal();
+					jQuery("#btnPolygon").prop('disabled', true);		// Button "Polygon berechnen" nun nicht mehr auswaehlbar
+					jQuery("#btnDelete").prop('disabled', true);		// Button "Daten loeschen" nun nicht mehr auswaehlbar
 				}	 	 
             },
 			// Fehlermeldung falls die maximale Wartezeit ueberschritten wurde
@@ -178,7 +180,7 @@ jQuery(document).ready(function(){
     jQuery("#btnDelete").click(function(){
         bosMarkerList.clearLayers();						// bisherige Marker loeschen
 		document.getElementById("formAdress").value = "";	// Formular zur Adresssuche leeren
-		jQuery("#btnPolygon").prop('disabled', true);		// Button "Polygon berechnen" nun nicht mehr  auswaehlbar
+		jQuery("#btnPolygon").prop('disabled', true);		// Button "Polygon berechnen" nun nicht mehr auswaehlbar
 		jQuery("#btnDelete").prop('disabled', true);		// Button "Daten loeschen" nun nicht mehr auswaehlbar
 		if (boolGeojsonErreichbarkeitspolygon == true){
 			geojsonErreichbarkeitspolygon.clearLayers();	// bisherige Erreichbarkeitspolygone loeschen
