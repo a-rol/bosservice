@@ -1,13 +1,7 @@
-######   ####    ####            ####   ######  #####   #     #  #####    ###   ######
-#    #  #    #  #    #          #    #  #       #    #  #     #    #     #   #  #
-#    #  #    #  #               #       #       #    #   #   #     #    #       #
-#####   #    #   ####   ######   ####   #####   #####    #   #     #    #       #####
-#    #  #    #       #               #  #       #  #      # #      #    #       #
-#    #  #    #  #    #          #    #  #       #   #     # #      #     #   #  #
-#####    ####    ####            ####   ######  #    #     #     #####    ###   ######
+BOS-SERVICE
 
 ------
-BOS --> Blaulichtorganisationen (Feuerwehr, Polizei, Ersthelfer)[german]
+BOS --> Blaulichtorganisationen (Feuerwehr, Polizei, Ersthelfer) [german]
 
 translation in english: Blue light organizations (fire brigade, police, first aid)
 
@@ -20,10 +14,13 @@ Project source can be downloaded from https://github.com/a-rol/bosservice
 ------
 Author & Contributor list
 
-Angelique Pruess;	angelique.pruess@students.hs-mainz.de
-Alexander Rolwes; 	alexander.rolwes@students.hs-mainz.de
-Sandro Mertens, 	sandro.mertens@students.hs-mainz.de
-Thomas Mueller; 	thomas.mueller@students.hs-mainz.de
+Angelique Pruess	angelique.pruess@students.hs-mainz.de
+
+Alexander Rolwes 	alexander.rolwes@students.hs-mainz.de
+
+Sandro Mertens 		sandro.mertens@students.hs-mainz.de
+
+Thomas Mueller 		thomas.mueller@students.hs-mainz.de
 
 ------
 About the website
@@ -66,39 +63,73 @@ See File list
 File list 
 
 gitignore
+
 LICENSE
+
 README-md
 
+
 ./isochroneAPI
+
 ./overpassAPI
+
 ./webanwendung
 
+
 /isochroneAPI:
+
 pom.xml
+
 /isochroneAPI/src/main:
+
 /isochroneAPI/src/main/java/isochroneAPI:
+
 CORS_Filter.java
+
 GetPropertyValue.java
+
 Main.java
+
 MyResourceTest.java
+
 RequestHandler.java
+
 call_IsochroneAPI.java
+
 /isochroneAPI/src/main/java/isochroneAPI/ParseGEOJSON:
+
 FeatureList.java
+
 Geometry.java
+
 IsochroneGEOJSON.java
+
 Polygon.java
+
 Properties.java
+
 /isochroneAPI/src/main/java/isochroneAPI/ParseJSON/Input:
+
 Coordinate.java
+
 InputJSON.java
+
 /isochroneAPI/src/main/resources:
+
 config.properties
+
+
 
 /overpassAPI:
 
 
+
+
+
 /webanwendung:
 
+
+
 ########################################## muss ebenfalls noch verfolständigt werden
+
 ------
