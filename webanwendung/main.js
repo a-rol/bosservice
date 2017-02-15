@@ -143,7 +143,7 @@ jQuery(document).ready(function(){
        })
     });
 	
-	// REAKTION BEI KLICK AUF DEN BUTTON "Polygon berechnen"
+	// REAKTION BEI KLICK AUF DEN BUTTON "Polygon berechnen" 
     jQuery("#btnPolygon").click(function(){
         var queryPoly = createObjPoly(); 						// Abfrage fuer den MicroService durch Funktionsaufruf "createObjPoly()" erzeugen
         var urlIsochrone = "http://143.93.114.120/isochrone";	// Adresse des MicroServices
