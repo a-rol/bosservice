@@ -2,217 +2,327 @@
 // @author Alexander Rolwes
 // @since 07.12.2016
 
+
+//****************************************
+// GLOBALE VARIABLEN
+//****************************************
+
 var map;
-var slider_data;
-var markerList = new L.FeatureGroup();
-var bool_geojsonLayer = false, bool_markerList = false;
+var sliderData;
+var bosMarkerList = new L.FeatureGroup();
+var geojsonErreichbarkeitspolygon;
+var boolGeojsonErreichbarkeitspolygon = false, boolBosMarkerList = false;
+	
+	
+//****************************************
+// FUNKTIONASAUFRUF WENN DOKUMENT VOLLSTÄNDIG GELADEN IST
+//****************************************
 
-
- jQuery(document).ready(function(){
-	jQuery("#btn_polygon").prop('disabled', true);
-	jQuery("#btn_delete").prop('disabled', true);
-    jQuery(".slider").slider({
+jQuery(document).ready(function(){
+	jQuery("#btnPolygon").prop('disabled', true);	// Button "Polygon berechnen" bei Anwendungsaufruf nicht auswaehlbar
+	jQuery("#btnDelete").prop('disabled', true);	// Button "Daten loeschen" bei Anwendungsaufruf nicht auswaehlbar
+    jQuery(".slider").slider({						// Slider Einstellungen
         max: 25,
         min: 5,
         step: 5,
         value: 0,
-        change: function( event, ui ){
-             slider_data = jQuery( ".slider" ).slider( "value" );
-             // alert(slider_data);
+        change: function(event, ui){							// Reaktion, wenn sich die Value des Sliders veraendert
+             sliderData = jQuery(".slider").slider("value");	// Slider-Value	in globale Variable sliderData schreiben
         }
     })
     .slider("pips", {
         rest: "label",
-        suffix: "Min.",
     });
-    slider_data = jQuery( ".slider" ).slider( "value" ); //der Startwert wird der Variablen slider_number_last_dates hinzugefügt
-    get_map();
+    sliderData = jQuery(".slider").slider("value"); // der Startwert wird der Variablen sliderData hinzugefuegt
+    getMap();  										// Funktionsaufruf getMap()
     
-    
-    
-    jQuery("#btn_information").click(function(){
-        document.getElementById('modal_header_information').innerHTML = "<h4 class='modal-title'>Information zur Webanwendung</h4>";
-        document.getElementById('modal_body_information').innerHTML =  "<div class='info_content'>Software Engineering Projekt der Hochschule Mainz - Semester 1 Master - WS 2016/2017<br><br>Verantwortlich für den Inhalt der Webseite:<br><br>Angelique Prüß, Sandro Mertens, Thomas Müller, Alexander Rolwes<br>Anfragen bitte an info@bos-erreichbarkeitsanalyse.de</div>";
-        jQuery("#modal_information").modal();
-    });
-    
-    jQuery("#btn_search").click(function(){
-        
-        var search_data = jQuery("#form_adress").val();
-        var url_geocoder = "http://143.93.114.139/geocoder";
-       
-        jQuery.ajax({
-            type: 'GET',
-            dataType: 'jsonp',
-            url: url_geocoder,
-            crossDomain : true,
-            data: 'queryString='+search_data+'&locale=de',
-            xhrFields: { withCredentials: true},
-            success: function(data_geocoder){
-				if (data_geocoder.features.length > 0){
-					long_mapcenter = data_geocoder.features[0].geometry.coordinates[0];
-					lat_mapcenter = data_geocoder.features[0].geometry.coordinates[1];
-                
-					map.setView(new L.LatLng(lat_mapcenter, long_mapcenter), 10);
-				}else{
-					document.getElementById('modal_header_alert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
-					document.getElementById('modal_body_alert').innerHTML =  "<div class='info_content'>Die von Ihnen eingegeben Adresse ist fehlerhaft. Es konnte kein passender Ort zugeordnet werden. Bitte verändern Sie Ihren Eingabe und führen Sie eine erneute Suchanfrage durch.</div>";
-					jQuery("#modal_alert").modal();
-				}    
-            }
-        })
-    });
-    
-    jQuery("#btn_bos").click(function(){
-		
-        var url_bos_standorte = "http://143.93.114.120/overpassAPI";     //Adresse des MicroServices
-        var query_intrest = "fire_station";
-        
-		if (bool_geojsonLayer == true){
-			geojsonLayer.clearLayers();
+	// REAKTION BEI KLICK AUF DEN BUTTON "Information"
+    jQuery("#btnInformation").click(function(){ 
+        document.getElementById('modalHeaderInformation').innerHTML = "<h4 class='modal-title'>Information zur Webanwendung</h4>";
+        document.getElementById('modalBodyInformation').innerHTML =  "<div>Software Engineering Projekt der Hochschule Mainz - Semester 1 Master - WS 2016/2017<br><br>Verantwortlich für den Inhalt der Webseite:<br><br>Angelique Prüß, Sandro Mertens, Thomas Müller, Alexander Rolwes<br>Anfragen bitte an angelique.pruess@students.hs-mainz.de</div>";
+        jQuery("#modalInformation").modal();		// Aufruf des Bootstrap Modals
+    });   
+	
+	// ADRESSSUCHE
+	// Auslösen der Adresssuche durch Klick auf den Button "Adresse suchen"
+	jQuery("#btnSearch").click(function(){ 				
+		searchAdress();
+	});
+	
+	// Auslösen der Adresssuche per Enter-Button (keyCode = 13)
+	jQuery("#formAdress").on('keyup', function (e) {
+		if (e.keyCode == 13) {
+			searchAdress();
+		}
+	});
+	
+	// Leeren des Input-Fields zur Adresssuche bei Klick in das Input-Field
+	jQuery("#formAdress").on('click', function (e) {
+		document.getElementById("formAdress").value = "";	// Formular zur Adresssuche leeren
+	});
+	
+	// REAKTION BEI KLICK AUF DEN BUTTON "BOS anzeigen"
+	jQuery("#btnBos").click(function(){
+		var urlBosStandorte = "http://143.93.114.120/overpassAPI";		// Adresse des MicroServices
+		var queryIntrest = "fire_station";								// Festlegung welche BOS angefragt werden sollen
+		if (boolGeojsonErreichbarkeitspolygon == true){
+			geojsonErreichbarkeitspolygon.clearLayers();				// bisherige Erreichbarkeitspolygone loeschen, falls vorhanden 
 		};
-		if (bool_markerList == true){
-			markerList.clearLayers();
+		if (boolBosMarkerList == true){
+			bosMarkerList.clearLayers();								// bisherige Marker loeschen, falls vorhanden 
 		};
-		
-        var east_koord = map.getBounds().getEast();
-        var west_koord = map.getBounds().getWest();
-        var south_koord = map.getBounds().getSouth();
-        var north_koord = map.getBounds().getNorth();
-		
+		// Koordinaten der aktuellen Karten-BoundingBox auslesen
+        var eastKoord = map.getBounds().getEast();
+        var westKoord = map.getBounds().getWest();
+        var southKoord = map.getBounds().getSouth();
+        var northKoord = map.getBounds().getNorth();
+		displayProgressBar();				// Ladebalken starten
 		jQuery.ajax({
-			timeout: 15000,
-            type: 'GET',           		 //Übergabetyp: Get
-            dataType: 'jsonp',           //Übergabe erfolgt im jsonp-Format
-            url: url_bos_standorte,      //Adresse des MicroServices (oben)
-            crossDomain: true,           //damit er auch auf andere Server zugreifen kann
-            data: 'interest='+query_intrest+'&south='+south_koord+'&west='+west_koord+'&north='+north_koord+'&east='+east_koord+'',
+			timeout: 15000,					// Festlegung der maximalen Ladezeit der AJAX-Anfrage
+            type: 'GET',					// Übergabetyp: Get
+            dataType: 'jsonp',				// Übergabe erfolgt im jsonp-Format
+            url: urlBosStandorte,			// Adresse des MicroServices
+            crossDomain: true,				// Erlaubt Zugriff auf andere Server (cross origin)
+            data: 'interest='+queryIntrest+'&south='+southKoord+'&west='+westKoord+'&north='+northKoord+'&east='+eastKoord+'', // Daten welche in der AJAX Abfrage an den MicroService uebergeben werden sollen
             xhrFields: {withCredentials: true},
-            success: function(data_point){    //Ergebnisverarbeitung
-                 var data_point =  JSON.parse(data_point);	
-				 if (data_point.features.length > 0){
-					var fireIcon = L.icon({
-					iconUrl: 'marker/firetruck.svg',
-					iconSize:     [38, 38], // size of the icon
-					// shadowSize:   [0, 0], // size of the shadow
-					iconAnchor:   [19, 19], // point of the icon which will correspond to marker's location
-					// shadowAnchor: [4, 62],  // the same for the shadow
-					// popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+            success: function(dataPoint){				// Durchfuehrung im Erfolgsfall
+				closeProgressBar();						// Ladebalken schliessen
+				var dataPoint =  JSON.parse(dataPoint); // parsen des empfangenen JSON				
+				if (dataPoint.features.length > 0){
+					testTime(true);						// Test ob Zeit überschritten worden ist
+					testBosMarker(true);				// Test ob BOS gefunden worden sind
+					var fireIcon = L.icon({				// neuen Icon erzeugen
+					iconUrl: 'marker/firetruck.svg',	// Icon URL
+					iconSize:     [38, 38], 			// Icongroesse
+					iconAnchor:   [19, 19], 			// Iconposition im Verhaeltnis zur Markerposotion
 					});
-					for (var coord in data_point.features){
-						long_fire = data_point.features[coord].geometry.coordinates[0];
-						lat_fire = data_point.features[coord].geometry.coordinates[1];
-						var marker = new L.marker([lat_fire, long_fire],{icon: fireIcon});
-						markerList.addLayer(marker);
+					// fuer jeden BOS-Standort ein Marker erstellen und als Layer der bosMarkerList hinzufügen
+					for (var coord in dataPoint.features){
+						var longFireStation = dataPoint.features[coord].geometry.coordinates[0];
+						var latFireStation = dataPoint.features[coord].geometry.coordinates[1];
+						var marker = new L.marker([latFireStation, longFireStation],{icon: fireIcon});
+						bosMarkerList.addLayer(marker);
 					}
-					map.addLayer(markerList); 
-					bool_markerList = true;
-					jQuery("#btn_polygon").prop('disabled', false);
-					jQuery("#btn_delete").prop('disabled', false);
+					map.addLayer(bosMarkerList); 		// bosMarkerList als Layer auf die Karte bringen
+					boolBosMarkerList = true;
+					jQuery("#btnPolygon").prop('disabled', false);	// Button "Polygon berechnen" nun auswaehlbar
+					jQuery("#btnDelete").prop('disabled', false);	// Button "Daten loeschen" nun auswaehlbar
 				}else{
-					document.getElementById('modal_header_alert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
-					document.getElementById('modal_body_alert').innerHTML =  "<div class='info_content'>In dem von Ihnen ausgewählten Bereich stehen keine BOS-Standorte zur Verfügung. Bitte verändern Sie Ihren Kartenausschnitt und führen Sie eine erneute Suchanfrage durch.</div>";
-					jQuery("#modal_alert").modal();
+					testTime(true);						// Test ob Zeit überschritten worden ist
+					testBosMarker(false);				// Test ob BOS gefunden worden sind
+					// Fehlermeldung falls keine BOS-Standorte im ausgewaehlten Bereich zur Verfuegung stehen
+					document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
+					document.getElementById('modalBodyAlert').innerHTML =  "<div>In dem von Ihnen ausgewählten Bereich stehen keine BOS-Standorte zur Verfügung. Bitte verändern Sie Ihren Kartenausschnitt und führen Sie eine erneute Suchanfrage durch.</div>";
+					jQuery("#modalAlert").modal();
+					jQuery("#btnPolygon").prop('disabled', true);		// Button "Polygon berechnen" nun nicht mehr auswaehlbar
+					jQuery("#btnDelete").prop('disabled', true);		// Button "Daten loeschen" nun nicht mehr auswaehlbar
 				}	 	 
             },
+			// Fehlermeldung falls die maximale Wartezeit ueberschritten wurde
 			error: function(){
-				document.getElementById('modal_header_alert').innerHTML = "<h4 class='modal-title'>Achtung! Die maximale Wartezeit wurde überschritten!</h4>";
-				document.getElementById('modal_body_alert').innerHTML =  "<div class='info_content'>In dem von Ihnen ausgewählten Bereich stehen eine Vielzahl an BOS-Standorte zur Verfügung. Bitte verkleinern Sie Ihren Kartenausschnitt und führen Sie eine erneute Suchanfrage durch.</div>";
-				jQuery("#modal_alert").modal();
+				testTime(false);						// Test ob Zeit überschritten worden ist
+				closeProgressBar();
+				document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung! Die maximale Wartezeit wurde überschritten!</h4>";
+				document.getElementById('modalBodyAlert').innerHTML =  "<div>In dem von Ihnen ausgewählten Bereich stehen eine Vielzahl an BOS-Standorte zur Verfügung. Bitte verkleinern Sie Ihren Kartenausschnitt und führen Sie eine erneute Suchanfrage durch.</div>";
+				jQuery("#modalAlert").modal();
 			}
        })
     });
-
-    jQuery("#btn_polygon").click(function(){
-        var query_poly = create_obj_poly();
-    
-        var url_isochrone = "http://143.93.114.120/isochrone";
-        
-		if (bool_geojsonLayer == true){
-			geojsonLayer.clearLayers();
-		};
+	
+	// REAKTION BEI KLICK AUF DEN BUTTON "Polygon berechnen"
+    jQuery("#btnPolygon").click(function(){
+        var queryPoly = createObjPoly(); 						// Abfrage fuer den MicroService durch Funktionsaufruf "createObjPoly()" erzeugen
+        var urlIsochrone = "http://143.93.114.120/isochrone";	// Adresse des MicroServices
+		if (boolGeojsonErreichbarkeitspolygon == true){
+			geojsonErreichbarkeitspolygon.clearLayers();		// bisherige Erreichbarkeitspolygone loeschen, falls vorhanden 
+		}
+		displayProgressBar();									// Ladebalken starten
         jQuery.ajax({
-			timeout: 15000,
-			type: 'POST',
-			headers: { 
+			timeout: 20000,										// Festlegung der maximalen Ladezeit der AJAX-Anfrag
+			type: 'POST',										// Übergabetyp: Post
+			headers: {											// Ein Objekt mit zusaetzlichen Header-Schluessel, die zusammen mit den Anforderungen des XMLHttpRequest-Transport gesendet werden.
 				'Accept': 'application/json',
-				'Content-Type': 'application/json', 
+				'Content-Type': 'application/json',
 			},
-			dataType: 'json',
-			url: url_isochrone,
-			crossDomain : true,
-			data: query_poly,
-			success: function(data_poly){
-				// console.log(JSON.stringify(data_poly));
-				// alert(data_poly);
-				// if (JSON.stringify(data_poly).length == 0){
-					// alert("nooothing");
-				// }else if (data_poly == "error"){
-					// alert("error");
-				// }else{
-					geojsonLayer = L.geoJson(data_poly).addTo(map);
-					bool_geojsonLayer = true;
-				// }
+			dataType: 'json',									// Übergabe erfolgt im jsonp-Format
+			url: urlIsochrone,									// Adresse des MicroServices
+			crossDomain : true,									// Erlaubt Zugriff auf andere Server (cross origin)
+			data: queryPoly,									// Daten welche in der AJAX Abfrage an den MicroService uebergeben werden sollen
+			success: function(dataPoly){						// Durchfuehrung im Erfolgsfall
+				closeProgressBar();								// Ladebalken schliessen
+				geojsonErreichbarkeitspolygon = L.geoJson(dataPoly).addTo(map); // Erreichbarkeitspolygon auf die Karte bringen
+				boolGeojsonErreichbarkeitspolygon = true;
+			testTime(true);						// Test ob Zeit überschritten worden ist
 			},
+			// Fehlermeldung falls die maximale Wartezeit ueberschritten wurde
 			error: function(){
-				document.getElementById('modal_header_alert').innerHTML = "<h4 class='modal-title'>Achtung! Die maximale Wartezeit wurde überschritten!</h4>";
-				document.getElementById('modal_body_alert').innerHTML =  "<div class='info_content'>In dem von Ihnen ausgewählten Bereich stehen eine Vielzahl an BOS-Standorte zur Verfügung. Eine Abfrage des Erreichbarkeitspolygons kann nicht ausgeführt werden. <br>Bitte verkleinern Sie Ihren Kartenausschnitt oder verändern Sie ihre Zeitliche Hilfsfrist und führen Sie eine erneute Suchanfrage durch.</div>";
-				jQuery("#modal_alert").modal();
+				testTime(false);						// Test ob Zeit überschritten worden ist
+				closeProgressBar();
+				document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
+				document.getElementById('modalBodyAlert').innerHTML =  "<div>In dem von Ihnen ausgewählten Bereich stehen eine Vielzahl an BOS-Standorte zur Verfügung. Eine Abfrage des Erreichbarkeitspolygons kann nicht ausgeführt werden. <br>Bitte verkleinern Sie Ihren Kartenausschnitt oder verändern Sie ihre Zeitliche Hilfsfrist und führen Sie eine erneute Suchanfrage durch. Polygone können zudem nur in Deutschland erzeugt werden!</div>";
+				jQuery("#modalAlert").modal();
 			}
         })   
-    });
-    
-    
-    jQuery("#btn_delete").click(function(){
-        markerList.clearLayers();
-		jQuery("#btn_polygon").prop('disabled', true);
-		jQuery("#btn_delete").prop('disabled', true);
-		if (bool_geojsonLayer == true){
-			geojsonLayer.clearLayers();
+    });  
+	// REAKTION BEI KLICK AUF DEN BUTTON "Daten loeschen"
+    jQuery("#btnDelete").click(function(){
+        bosMarkerList.clearLayers();						// bisherige Marker loeschen
+		document.getElementById("formAdress").value = "";	// Formular zur Adresssuche leeren
+		jQuery("#btnPolygon").prop('disabled', true);		// Button "Polygon berechnen" nun nicht mehr auswaehlbar
+		jQuery("#btnDelete").prop('disabled', true);		// Button "Daten loeschen" nun nicht mehr auswaehlbar
+		if (boolGeojsonErreichbarkeitspolygon == true){
+			geojsonErreichbarkeitspolygon.clearLayers();	// bisherige Erreichbarkeitspolygone loeschen
 		}
-    });
-    
-    map.on('zoomend', function() {
-        //alert(map.getZoom());
-    });
-});	
+	});
+});
 
-function get_map(){
+
+//****************************************
+// PUBLIC METHODEN
+//****************************************
+
+// ERZEUGEN DER KARTE
+function getMap(){
+	// Attribue der Karte
     map = L.map('map', {
         center: [51.5, 9.75],
         zoom: 6,
         minZoom: 6
     });
+	// Festlegung der Karte sowie der Urheberrechte
     L.tileLayer('http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors | &copy; SEng Gruppe 1'
     }).addTo(map);
 }
 
-function create_obj_poly(){
-    var obj = new Object();
-    obj.timelimit = slider_data;
-    bos = [];
+// OBJEKT ERZEUGEN ALS VORBEREITUNG ZUR ABFRAGE AN DEN ISOCHRONE MICROSERVICE
+function createObjPoly(){
+    var obj = new Object();			// Objekt anlegen
+    obj.timelimit = sliderData;		// Slider-Value als Zeitlimit 
+    var bos = [];					// BOS-Array erzeugen, wo alle Standorte der BOS gespeichert werden
     var i = 0;
-    for (var fire_marker in markerList._layers){
-        if (fire_marker._latlng !== null) {
-			var latitude = markerList._layers[fire_marker]._latlng.lat;
-			var longitude = markerList._layers[fire_marker]._latlng.lng;
+	// Schleife um die gesamte bosMarkerList zu durchlaufen
+    for (var fireMarker in bosMarkerList._layers){	
+        if (fireMarker._latlng !== null) {
+			// Latitude / Longitude des jeweiligen Markers
+			var latitude = bosMarkerList._layers[fireMarker]._latlng.lat;
+			var longitude = bosMarkerList._layers[fireMarker]._latlng.lng;
 			
-			// prüfen ob die koordinaten der marker im map rechteck sind 	
+			// Pruefen ob die Koordinaten der jeweiligen Marker im der aktuellen BoundingBox der Map sind
 			if(map.getBounds().contains([parseFloat(latitude), parseFloat(longitude)]) == true){
-				bos_item = {};
-				coord_item = {};
-				coord_item['lat'] = latitude;
-				coord_item['lng'] = longitude;
-				bos_item = coord_item;
-				bos.push(bos_item);
+				// Teilobjekt zum jeweiligen Marker erzeugen
+				var bosItem = {};
+				var coordItem = {};
+				coordItem['lat'] = latitude;
+				coordItem['lng'] = longitude;
+				bosItem = coordItem;
+				bos.push(bosItem);
 				i++;
 			}else{
-				map.removeLayer(markerList._layers[fire_marker]);
+			// falls die Koordinaten des jeweiligen Markers nicht in der BoundingBox der Map sind, Marker von Karte und aus Objekt loeschen
+				map.removeLayer(bosMarkerList._layers[fireMarker]);
+				delete bosMarkerList._layers[fireMarker];
 			}
         }
     };
-    obj.bos = bos;
-    var jsonString = JSON.stringify(obj);
-    return jsonString;
+    obj.bos = bos;							// Gesamtobjekt erzeugen
+    var jsonString = JSON.stringify(obj);	// Objekt in JSON-Notation erzeugen und in String-Variablen schreiben
+    return jsonString;						// Rueckgabe der Variable
+}
+
+// OBJEKT ERZEUGEN ALS VORBEREITUNG ZUR ABFRAGE AN DEN ISOCHRONE MICROSERVICE
+function displayProgressBar(){
+	jQuery('body').css('pointer-events','none');	// Mausevents nicht zulassen
+	document.getElementById('modalBodyProgress').innerHTML =  "<div> <br><img src='marker/progressBar.gif'><br><br>Bitte warten, die Daten werden geladen!<br></div>";
+	jQuery("#modalProgressBar").modal({
+		keyboard: false		// Tastaturevents nicht zulassen
+	});
+}
+
+// SCHLIESSEN DES LADEBALKENS
+function closeProgressBar(){
+	jQuery("#modalProgressBar").modal('toggle');
+	jQuery('body').css('pointer-events','auto');	// Mausevents wieder zulassen
+}
+
+// ADRESSSUCHE MIT HILFE DES GEOCODER MICROSERVICE
+function searchAdress(){
+    var searchData = jQuery("#formAdress").val(); 			// Auslesen des Formulars
+	displayProgressBar();									// Ladebalken starten
+	if (searchData.length > 0){								// Kommunikation mit dem Geocode MicroService nur wenn das Formular gefuellt ist
+		var urlGeocoder = "http://143.93.114.139/geocoder";	// Adresse des MicroServices
+		jQuery.ajax({
+			type: 'GET',									// Übergabetyp: Get
+			dataType: 'jsonp',								// Übergabe erfolgt im jsonp-Format
+			url: urlGeocoder,								// Adresse des MicroServices
+			crossDomain : true,								// Erlaubt Zugriff auf andere Server (cross origin)
+			data: 'queryString='+searchData+'&locale=de',	// Daten welche in der AJAX Abfrage an den MicroService uebergeben werden sollen
+			xhrFields: {withCredentials: true},
+			success: function(dataGeocoder){				// Durchfuehrung im Erfolgsfall 
+				closeProgressBar();							// Ladebalken schliessen
+				if (dataGeocoder.features.length > 0 && searchData !=""){
+					// die als Ergebnis zurueckgegebenen Daten verarbeiten und mit der Karte in den gesuchten Bereich zoomen
+					longMapcenter = dataGeocoder.features[0].geometry.coordinates[0];
+					latMapcenter = dataGeocoder.features[0].geometry.coordinates[1];
+					map.setView(new L.LatLng(latMapcenter, longMapcenter), 12);
+				}else{
+					// Fehlermeldung falls keine Adresse zur Eingabe gefunden wurde
+					document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
+					document.getElementById('modalBodyAlert').innerHTML =  "<div>Die von Ihnen eingegeben Adresse ist fehlerhaft. Es konnte kein passender Ort zugeordnet werden. Bitte verändern Sie Ihren Eingabe und führen Sie eine erneute Suchanfrage durch.</div>";
+					jQuery("#modalAlert").modal();
+				}    
+			}
+		})
+	}else{
+		// Fehlermeldung falls das Suchformular leer ist
+		closeProgressBar();
+		document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
+		document.getElementById('modalBodyAlert').innerHTML =  "<div>Das Suchformular ist leer. Bitte geben Sie eine Adresse ein.</div>";
+		jQuery("#modalAlert").modal();
+	}
+}
+
+
+//****************************************
+// TESTS
+//****************************************
+
+//Test ob Adresssuche leer oder durchführbar
+function testSearchData(zustand){	//Zeile 51 und 78
+	if (zustand==true){
+		var ausgabeSearchData=('Adresssuche wird durchgeführt');
+	}else{
+		var ausgabeSearchData=('Adresssuche kann nicht durchgeführt werden');
+	}
+	console.log(ausgabeSearchData);
+}
+
+//Test ob Adresse gefunden wurde
+function testDataGeocoder(zustand){		//Zeile 63 und 69
+	if (zustand==true){
+		var ausgabeDataGeocoder=('Adresse gefunden');
+	}else{
+		var ausgabeDataGeocoder=('Keine Adresse gefunden');
+	}
+	console.log(ausgabeDataGeocoder);
+}
+
+//Test ob BOS gefunden wurden
+function testBosMarker(zustand){		//Zeile 116 und 135
+	if (zustand==true){
+		var ausgabeBosMarker=('BOS gefunden');
+	}else{
+		var ausgabeBosMarker=('Keine BOS gefunden');
+	}
+	console.log(ausgabeBosMarker);
+}
+
+//Test ob Zeit überschritten wurde
+function testTime(zustand){				// Zeile 115, 134, 146, 178 und 182
+	if (zustand==true){
+		var ausgabeTime=('Zeit nicht überschritten');
+	}else{
+		var ausgabeTime=('Zeit überschritten');
+	}
+	console.log(ausgabeTime);
 }
