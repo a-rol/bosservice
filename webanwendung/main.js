@@ -43,43 +43,24 @@ jQuery(document).ready(function(){
         jQuery("#modalInformation").modal();		// Aufruf des Bootstrap Modals
     });   
 	
-	// REAKTION BEI KLICK AUF DEN BUTTON "Adresse suchen"
+	// ADRESSSUCHE
+	// Auslösen der Adresssuche durch Klick auf den Button "Adresse suchen"
     jQuery("#btnSearch").click(function(){ 				
-        var searchData = jQuery("#formAdress").val(); 	// Auslesen des Formulars
-		displayProgressBar();							// Ladebalken starten
-		if (searchData.length > 0){						// Kommunikation mit dem Geocode MicroService nur wenn das Formular gefuellt ist
-			var urlGeocoder = "http://143.93.114.139/geocoder";	//Adresse des MicroServices
-			jQuery.ajax({
-				type: 'GET',									// Übergabetyp: Get
-				dataType: 'jsonp',								// Übergabe erfolgt im jsonp-Format
-				url: urlGeocoder,								// Adresse des MicroServices
-				crossDomain : true,								// Erlaubt Zugriff auf andere Server (cross origin)
-				data: 'queryString='+searchData+'&locale=de',	// Daten welche in der AJAX Abfrage an den MicroService uebergeben werden sollen
-				xhrFields: {withCredentials: true},
-				success: function(dataGeocoder){				// Durchfuehrung im Erfolgsfall 
-					closeProgressBar();							// Ladebalken schliessen
-					if (dataGeocoder.features.length > 0 && searchData !=""){
-						// die als Ergebnis zurueckgegebenen Daten verarbeiten und mit der Karte in den gesuchten Bereich zoomen
-						longMapcenter = dataGeocoder.features[0].geometry.coordinates[0];
-						latMapcenter = dataGeocoder.features[0].geometry.coordinates[1];
-						map.setView(new L.LatLng(latMapcenter, longMapcenter), 12);
-					}else{
-						// Fehlermeldung falls keine Adresse zur Eingabe gefunden wurde
-						document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
-						document.getElementById('modalBodyAlert').innerHTML =  "<div>Die von Ihnen eingegeben Adresse ist fehlerhaft. Es konnte kein passender Ort zugeordnet werden. Bitte verändern Sie Ihren Eingabe und führen Sie eine erneute Suchanfrage durch.</div>";
-						jQuery("#modalAlert").modal();
-					}    
-				}
-			})
-		}else{
-			// Fehlermeldung falls das Suchformular leer ist
-			closeProgressBar();
-			document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
-			document.getElementById('modalBodyAlert').innerHTML =  "<div>Das Suchformular ist leer. Bitte geben Sie eine Adresse ein.</div>";
-			jQuery("#modalAlert").modal();
-		}
+		searchAdress();
     });
-    
+	
+	// Auslösen der Adresssuche per Enter-Button
+	jQuery("#formAdress").on('keyup', function (e) {
+		if (e.keyCode == 13) {
+			searchAdress();
+		}
+	});
+	
+	// Leeren des Input-Fields zur Adresssuche bei Klick in das Input-Field
+	jQuery("#formAdress").on('click', function (e) {
+		document.getElementById("formAdress").value = "";	// Formular zur Adresssuche leeren
+	});
+	  
 	// REAKTION BEI KLICK AUF DEN BUTTON "BOS anzeigen"
     jQuery("#btnBos").click(function(){
         var urlBosStandorte = "http://143.93.114.120/overpassAPI";		// Adresse des MicroServices
@@ -255,4 +236,41 @@ function displayProgressBar(){
 function closeProgressBar(){
 	jQuery("#modalProgressBar").modal('toggle');
 	jQuery('body').css('pointer-events','auto');	// Mausevents wieder zulassen
+}
+
+// ADRESSSUCHE MIT HILFE DES GEOCODER MICROSERVICE
+function searchAdress(){
+    var searchData = jQuery("#formAdress").val(); 			// Auslesen des Formulars
+	displayProgressBar();									// Ladebalken starten
+	if (searchData.length > 0){								// Kommunikation mit dem Geocode MicroService nur wenn das Formular gefuellt ist
+		var urlGeocoder = "http://143.93.114.139/geocoder";	// Adresse des MicroServices
+		jQuery.ajax({
+			type: 'GET',									// Übergabetyp: Get
+			dataType: 'jsonp',								// Übergabe erfolgt im jsonp-Format
+			url: urlGeocoder,								// Adresse des MicroServices
+			crossDomain : true,								// Erlaubt Zugriff auf andere Server (cross origin)
+			data: 'queryString='+searchData+'&locale=de',	// Daten welche in der AJAX Abfrage an den MicroService uebergeben werden sollen
+			xhrFields: {withCredentials: true},
+			success: function(dataGeocoder){				// Durchfuehrung im Erfolgsfall 
+				closeProgressBar();							// Ladebalken schliessen
+				if (dataGeocoder.features.length > 0 && searchData !=""){
+					// die als Ergebnis zurueckgegebenen Daten verarbeiten und mit der Karte in den gesuchten Bereich zoomen
+					longMapcenter = dataGeocoder.features[0].geometry.coordinates[0];
+					latMapcenter = dataGeocoder.features[0].geometry.coordinates[1];
+					map.setView(new L.LatLng(latMapcenter, longMapcenter), 12);
+				}else{
+					// Fehlermeldung falls keine Adresse zur Eingabe gefunden wurde
+					document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
+					document.getElementById('modalBodyAlert').innerHTML =  "<div>Die von Ihnen eingegeben Adresse ist fehlerhaft. Es konnte kein passender Ort zugeordnet werden. Bitte verändern Sie Ihren Eingabe und führen Sie eine erneute Suchanfrage durch.</div>";
+					jQuery("#modalAlert").modal();
+				}    
+			}
+		})
+	}else{
+		// Fehlermeldung falls das Suchformular leer ist
+		closeProgressBar();
+		document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
+		document.getElementById('modalBodyAlert').innerHTML =  "<div>Das Suchformular ist leer. Bitte geben Sie eine Adresse ein.</div>";
+		jQuery("#modalAlert").modal();
+	}
 }
