@@ -44,7 +44,7 @@ html,body,.container{
 }
 
 .row-selection-bar{
-	height: 67%;
+	height: 70%;
 	padding: 7px !important;
 	border-width: 2px;
 	border-bottom-style: solid;
@@ -52,7 +52,7 @@ html,body,.container{
 }
 
 .row-legend{
-	height: 33%;
+	height: 30%;
 	padding: 7px !important;
 }
 

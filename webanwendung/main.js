@@ -2,16 +2,7 @@
 // @author Alexander Rolwes
 // @since 07.12.2016
 
-/**
- * Globale Variablen.
- * @param {L.map} map - Die Leafletkarte.
- * @param {number} sliderData - Die Daten des Slider Eingabefelds.
- * @param {L.FeatureGroup} bosMarkerList - Eine Liste aller Marker mit ihren Koordinaten (BOS-Standorte), welche auf der Karte angezeigt werden sollen.
- * @param {L.geoJson} geojsonErreichbarkeitspolygon - Das erzeugte Polygon zur Erreichbarkeitsanalyse.
- * @param {boolean} boolGeojsonErreichbarkeitspolygon - Information, ob das Erreichbarkeitspolygon bereits erzeugt wurde.
- * @param {boolean} boolBosMarkerList - Information, ob die Liste aller Marker bereits erzeugt wurde.
- */
- 
+
 //****************************************
 // GLOBALE VARIABLEN
 //****************************************
@@ -48,7 +39,7 @@ jQuery(document).ready(function(){
 	// REAKTION BEI KLICK AUF DEN BUTTON "Information"
     jQuery("#btnInformation").click(function(){ 
         document.getElementById('modalHeaderInformation').innerHTML = "<h4 class='modal-title'>Information zur Webanwendung</h4>";
-        document.getElementById('modalBodyInformation').innerHTML =  "<div>Software Engineering Projekt der Hochschule Mainz - Semester 1 Master - WS 2016/2017<br><br>Verantwortlich für den Inhalt der Webseite:<br><br>Angelique Prüß, Sandro Mertens, Thomas Müller, Alexander Rolwes<br>Anfragen bitte an info@bos-erreichbarkeitsanalyse.de</div>";
+        document.getElementById('modalBodyInformation').innerHTML =  "<div>Software Engineering Projekt der Hochschule Mainz - Semester 1 Master - WS 2016/2017<br><br>Verantwortlich für den Inhalt der Webseite:<br><br>Angelique Prüß, Sandro Mertens, Thomas Müller, Alexander Rolwes<br>Anfragen bitte an angelique.pruess@students.hs-mainz.de</div>";
         jQuery("#modalInformation").modal();		// Aufruf des Bootstrap Modals
     });   
 	
@@ -66,7 +57,7 @@ jQuery(document).ready(function(){
 				data: 'queryString='+searchData+'&locale=de',	// Daten welche in der AJAX Abfrage an den MicroService uebergeben werden sollen
 				xhrFields: {withCredentials: true},
 				success: function(dataGeocoder){				// Durchfuehrung im Erfolgsfall 
-					closeProgressBar()							// Ladebalken schliessen
+					closeProgressBar();							// Ladebalken schliessen
 					if (dataGeocoder.features.length > 0 && searchData !=""){
 						// die als Ergebnis zurueckgegebenen Daten verarbeiten und mit der Karte in den gesuchten Bereich zoomen
 						longMapcenter = dataGeocoder.features[0].geometry.coordinates[0];
@@ -82,7 +73,7 @@ jQuery(document).ready(function(){
 			})
 		}else{
 			// Fehlermeldung falls das Suchformular leer ist
-			closeProgressBar()
+			closeProgressBar();
 			document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
 			document.getElementById('modalBodyAlert').innerHTML =  "<div>Das Suchformular ist leer. Bitte geben Sie eine Adresse ein.</div>";
 			jQuery("#modalAlert").modal();
@@ -115,7 +106,7 @@ jQuery(document).ready(function(){
             xhrFields: {withCredentials: true},
             success: function(dataPoint){				// Durchfuehrung im Erfolgsfall
 				closeProgressBar();						// Ladebalken schliessen
-				var dataPoint =  JSON.parse(dataPoint); // parsen des empfangenen JSON
+				var dataPoint =  JSON.parse(dataPoint); // parsen des empfangenen JSON				
 				if (dataPoint.features.length > 0){
 					var fireIcon = L.icon({				// neuen Icon erzeugen
 					iconUrl: 'marker/firetruck.svg',	// Icon URL
@@ -138,6 +129,8 @@ jQuery(document).ready(function(){
 					document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
 					document.getElementById('modalBodyAlert').innerHTML =  "<div>In dem von Ihnen ausgewählten Bereich stehen keine BOS-Standorte zur Verfügung. Bitte verändern Sie Ihren Kartenausschnitt und führen Sie eine erneute Suchanfrage durch.</div>";
 					jQuery("#modalAlert").modal();
+					jQuery("#btnPolygon").prop('disabled', true);		// Button "Polygon berechnen" nun nicht mehr auswaehlbar
+					jQuery("#btnDelete").prop('disabled', true);		// Button "Daten loeschen" nun nicht mehr auswaehlbar
 				}	 	 
             },
 			// Fehlermeldung falls die maximale Wartezeit ueberschritten wurde
@@ -150,7 +143,7 @@ jQuery(document).ready(function(){
        })
     });
 	
-	// REAKTION BEI KLICK AUF DEN BUTTON "BOS anzeigen"
+	// REAKTION BEI KLICK AUF DEN BUTTON "Polygon berechnen"
     jQuery("#btnPolygon").click(function(){
         var queryPoly = createObjPoly(); 						// Abfrage fuer den MicroService durch Funktionsaufruf "createObjPoly()" erzeugen
         var urlIsochrone = "http://143.93.114.120/isochrone";	// Adresse des MicroServices
@@ -159,7 +152,7 @@ jQuery(document).ready(function(){
 		}
 		displayProgressBar();									// Ladebalken starten
         jQuery.ajax({
-			timeout: 15000,										// Festlegung der maximalen Ladezeit der AJAX-Anfrag
+			timeout: 20000,										// Festlegung der maximalen Ladezeit der AJAX-Anfrag
 			type: 'POST',										// Übergabetyp: Post
 			headers: {											// Ein Objekt mit zusaetzlichen Header-Schluessel, die zusammen mit den Anforderungen des XMLHttpRequest-Transport gesendet werden.
 				'Accept': 'application/json',
@@ -170,15 +163,15 @@ jQuery(document).ready(function(){
 			crossDomain : true,									// Erlaubt Zugriff auf andere Server (cross origin)
 			data: queryPoly,									// Daten welche in der AJAX Abfrage an den MicroService uebergeben werden sollen
 			success: function(dataPoly){						// Durchfuehrung im Erfolgsfall
-				closeProgressBar()								// Ladebalken schliessen
+				closeProgressBar();								// Ladebalken schliessen
 				geojsonErreichbarkeitspolygon = L.geoJson(dataPoly).addTo(map); // Erreichbarkeitspolygon auf die Karte bringen
 				boolGeojsonErreichbarkeitspolygon = true;
 			},
 			// Fehlermeldung falls die maximale Wartezeit ueberschritten wurde
 			error: function(){
-				closeProgressBar()
-				document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung! Die maximale Wartezeit wurde überschritten!</h4>";
-				document.getElementById('modalBodyAlert').innerHTML =  "<div>In dem von Ihnen ausgewählten Bereich stehen eine Vielzahl an BOS-Standorte zur Verfügung. Eine Abfrage des Erreichbarkeitspolygons kann nicht ausgeführt werden. <br>Bitte verkleinern Sie Ihren Kartenausschnitt oder verändern Sie ihre Zeitliche Hilfsfrist und führen Sie eine erneute Suchanfrage durch.</div>";
+				closeProgressBar();
+				document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
+				document.getElementById('modalBodyAlert').innerHTML =  "<div>In dem von Ihnen ausgewählten Bereich stehen eine Vielzahl an BOS-Standorte zur Verfügung. Eine Abfrage des Erreichbarkeitspolygons kann nicht ausgeführt werden. <br>Bitte verkleinern Sie Ihren Kartenausschnitt oder verändern Sie ihre Zeitliche Hilfsfrist und führen Sie eine erneute Suchanfrage durch. Polygone können zudem nur in Deutschland erzeugt werden!</div>";
 				jQuery("#modalAlert").modal();
 			}
         })   
@@ -187,7 +180,7 @@ jQuery(document).ready(function(){
     jQuery("#btnDelete").click(function(){
         bosMarkerList.clearLayers();						// bisherige Marker loeschen
 		document.getElementById("formAdress").value = "";	// Formular zur Adresssuche leeren
-		jQuery("#btnPolygon").prop('disabled', true);		// Button "Polygon berechnen" nun nicht mehr  auswaehlbar
+		jQuery("#btnPolygon").prop('disabled', true);		// Button "Polygon berechnen" nun nicht mehr auswaehlbar
 		jQuery("#btnDelete").prop('disabled', true);		// Button "Daten loeschen" nun nicht mehr auswaehlbar
 		if (boolGeojsonErreichbarkeitspolygon == true){
 			geojsonErreichbarkeitspolygon.clearLayers();	// bisherige Erreichbarkeitspolygone loeschen
