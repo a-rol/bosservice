@@ -37,7 +37,7 @@ public class CallIsochroneApi {
     * Ruft den Graphhopper Isochrone Services auf und bereitet die Daten für den MS auf
     * @param inputJson Klasse mit den Abfrageparametern
     * @return Uri for geocoder request on graphhopper API
-    * @throws 
+    * @throws {IOException} bei fehlerhaften oder nicht im Bereich liegenden Angaben im InputJson
     */
 	public static String URLConnectionReader(InputJson inputJson) {
 		try{
@@ -76,7 +76,6 @@ public class CallIsochroneApi {
     * Erstellt Liste mit URL-Abfragen
     * @param inputJson Klasse mit den Abfrageparametern
     * @return Liste mit einzelnen URL-Abfragen
-    * @throws 
     */
 	public static List<String> buildUrlList(InputJson inputJson){		
 		int timeLimit = inputJson.getTimeMin() * 60;
