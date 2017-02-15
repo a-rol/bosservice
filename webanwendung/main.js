@@ -46,50 +46,10 @@ jQuery(document).ready(function(){
 	// ADRESSSUCHE
 	// Auslösen der Adresssuche durch Klick auf den Button "Adresse suchen"
     jQuery("#btnSearch").click(function(){ 				
-<<<<<<< HEAD
 		searchAdress();
-=======
-        var searchData = jQuery("#formAdress").val(); 	// Auslesen des Formulars
-		displayProgressBar();							// Ladebalken starten
-		if (searchData.length > 0){						// Kommunikation mit dem Geocode MicroService nur wenn das Formular gefuellt ist
-			testSearchData(true);						// Test ob es eine Eingabe erfolgte
-			var urlGeocoder = "http://143.93.114.139/geocoder";	//Adresse des MicroServices
-			jQuery.ajax({
-				type: 'GET',									// Übergabetyp: Get
-				dataType: 'jsonp',								// Übergabe erfolgt im jsonp-Format
-				url: urlGeocoder,								// Adresse des MicroServices
-				crossDomain : true,								// Erlaubt Zugriff auf andere Server (cross origin)
-				data: 'queryString='+searchData+'&locale=de',	// Daten welche in der AJAX Abfrage an den MicroService uebergeben werden sollen
-				xhrFields: {withCredentials: true},
-				success: function(dataGeocoder){				// Durchfuehrung im Erfolgsfall 
-					closeProgressBar();							// Ladebalken schliessen
-					if (dataGeocoder.features.length > 0 && searchData !=""){
-						testDataGeocoder(true)	//Test ob Geocoder eine Adresse gefunden hat
-						// die als Ergebnis zurueckgegebenen Daten verarbeiten und mit der Karte in den gesuchten Bereich zoomen
-						longMapcenter = dataGeocoder.features[0].geometry.coordinates[0];
-						latMapcenter = dataGeocoder.features[0].geometry.coordinates[1];
-						map.setView(new L.LatLng(latMapcenter, longMapcenter), 12);
-					}else{
-						testDataGeocoder(false)	//Test ob Geocoder eine Adresse gefunden hat
-						// Fehlermeldung falls keine Adresse zur Eingabe gefunden wurde
-						document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
-						document.getElementById('modalBodyAlert').innerHTML =  "<div>Die von Ihnen eingegeben Adresse ist fehlerhaft. Es konnte kein passender Ort zugeordnet werden. Bitte verändern Sie Ihren Eingabe und führen Sie eine erneute Suchanfrage durch.</div>";
-						jQuery("#modalAlert").modal();
-					}    
-				}
-			})
-		}else{
-			testSearchData(false);						// Test ob es eine Eingabe erfolgte
-			// Fehlermeldung falls das Suchformular leer ist
-			closeProgressBar();
-			document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
-			document.getElementById('modalBodyAlert').innerHTML =  "<div>Das Suchformular ist leer. Bitte geben Sie eine Adresse ein.</div>";
-			jQuery("#modalAlert").modal();
-		}
->>>>>>> branch 'master' of https://github.com/a-rol/bosservice.git
     });
 	
-	// Auslösen der Adresssuche per Enter-Button
+	// Auslösen der Adresssuche per Enter-Button (keyCode = 13)
 	jQuery("#formAdress").on('keyup', function (e) {
 		if (e.keyCode == 13) {
 			searchAdress();
@@ -285,7 +245,6 @@ function closeProgressBar(){
 	jQuery('body').css('pointer-events','auto');	// Mausevents wieder zulassen
 }
 
-<<<<<<< HEAD
 // ADRESSSUCHE MIT HILFE DES GEOCODER MICROSERVICE
 function searchAdress(){
     var searchData = jQuery("#formAdress").val(); 			// Auslesen des Formulars
@@ -321,7 +280,9 @@ function searchAdress(){
 		document.getElementById('modalBodyAlert').innerHTML =  "<div>Das Suchformular ist leer. Bitte geben Sie eine Adresse ein.</div>";
 		jQuery("#modalAlert").modal();
 	}
-=======
+}
+
+
 //****************************************
 // TESTS
 //****************************************
@@ -364,5 +325,4 @@ function testTime(zustand){				// Zeile 115, 134, 146, 178 und 182
 		var ausgabeTime=('Zeit überschritten');
 	}
 	console.log(ausgabeTime);
->>>>>>> branch 'master' of https://github.com/a-rol/bosservice.git
 }
