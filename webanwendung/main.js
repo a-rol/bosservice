@@ -46,7 +46,47 @@ jQuery(document).ready(function(){
 	// ADRESSSUCHE
 	// Auslösen der Adresssuche durch Klick auf den Button "Adresse suchen"
     jQuery("#btnSearch").click(function(){ 				
+<<<<<<< HEAD
 		searchAdress();
+=======
+        var searchData = jQuery("#formAdress").val(); 	// Auslesen des Formulars
+		displayProgressBar();							// Ladebalken starten
+		if (searchData.length > 0){						// Kommunikation mit dem Geocode MicroService nur wenn das Formular gefuellt ist
+			testSearchData(true);						// Test ob es eine Eingabe erfolgte
+			var urlGeocoder = "http://143.93.114.139/geocoder";	//Adresse des MicroServices
+			jQuery.ajax({
+				type: 'GET',									// Übergabetyp: Get
+				dataType: 'jsonp',								// Übergabe erfolgt im jsonp-Format
+				url: urlGeocoder,								// Adresse des MicroServices
+				crossDomain : true,								// Erlaubt Zugriff auf andere Server (cross origin)
+				data: 'queryString='+searchData+'&locale=de',	// Daten welche in der AJAX Abfrage an den MicroService uebergeben werden sollen
+				xhrFields: {withCredentials: true},
+				success: function(dataGeocoder){				// Durchfuehrung im Erfolgsfall 
+					closeProgressBar();							// Ladebalken schliessen
+					if (dataGeocoder.features.length > 0 && searchData !=""){
+						testDataGeocoder(true)	//Test ob Geocoder eine Adresse gefunden hat
+						// die als Ergebnis zurueckgegebenen Daten verarbeiten und mit der Karte in den gesuchten Bereich zoomen
+						longMapcenter = dataGeocoder.features[0].geometry.coordinates[0];
+						latMapcenter = dataGeocoder.features[0].geometry.coordinates[1];
+						map.setView(new L.LatLng(latMapcenter, longMapcenter), 12);
+					}else{
+						testDataGeocoder(false)	//Test ob Geocoder eine Adresse gefunden hat
+						// Fehlermeldung falls keine Adresse zur Eingabe gefunden wurde
+						document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
+						document.getElementById('modalBodyAlert').innerHTML =  "<div>Die von Ihnen eingegeben Adresse ist fehlerhaft. Es konnte kein passender Ort zugeordnet werden. Bitte verändern Sie Ihren Eingabe und führen Sie eine erneute Suchanfrage durch.</div>";
+						jQuery("#modalAlert").modal();
+					}    
+				}
+			})
+		}else{
+			testSearchData(false);						// Test ob es eine Eingabe erfolgte
+			// Fehlermeldung falls das Suchformular leer ist
+			closeProgressBar();
+			document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
+			document.getElementById('modalBodyAlert').innerHTML =  "<div>Das Suchformular ist leer. Bitte geben Sie eine Adresse ein.</div>";
+			jQuery("#modalAlert").modal();
+		}
+>>>>>>> branch 'master' of https://github.com/a-rol/bosservice.git
     });
 	
 	// Auslösen der Adresssuche per Enter-Button
@@ -89,6 +129,8 @@ jQuery(document).ready(function(){
 				closeProgressBar();						// Ladebalken schliessen
 				var dataPoint =  JSON.parse(dataPoint); // parsen des empfangenen JSON				
 				if (dataPoint.features.length > 0){
+					testTime(true);						// Test ob Zeit überschritten worden ist
+					testBosMarker(true);				// Test ob BOS gefunden worden sind
 					var fireIcon = L.icon({				// neuen Icon erzeugen
 					iconUrl: 'marker/firetruck.svg',	// Icon URL
 					iconSize:     [38, 38], 			// Icongroesse
@@ -106,6 +148,8 @@ jQuery(document).ready(function(){
 					jQuery("#btnPolygon").prop('disabled', false);	// Button "Polygon berechnen" nun auswaehlbar
 					jQuery("#btnDelete").prop('disabled', false);	// Button "Daten loeschen" nun auswaehlbar
 				}else{
+					testTime(true);						// Test ob Zeit überschritten worden ist
+					testBosMarker(false);				// Test ob BOS gefunden worden sind
 					// Fehlermeldung falls keine BOS-Standorte im ausgewaehlten Bereich zur Verfuegung stehen
 					document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
 					document.getElementById('modalBodyAlert').innerHTML =  "<div>In dem von Ihnen ausgewählten Bereich stehen keine BOS-Standorte zur Verfügung. Bitte verändern Sie Ihren Kartenausschnitt und führen Sie eine erneute Suchanfrage durch.</div>";
@@ -116,6 +160,7 @@ jQuery(document).ready(function(){
             },
 			// Fehlermeldung falls die maximale Wartezeit ueberschritten wurde
 			error: function(){
+				testTime(false);						// Test ob Zeit überschritten worden ist
 				closeProgressBar();
 				document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung! Die maximale Wartezeit wurde überschritten!</h4>";
 				document.getElementById('modalBodyAlert').innerHTML =  "<div>In dem von Ihnen ausgewählten Bereich stehen eine Vielzahl an BOS-Standorte zur Verfügung. Bitte verkleinern Sie Ihren Kartenausschnitt und führen Sie eine erneute Suchanfrage durch.</div>";
@@ -147,9 +192,11 @@ jQuery(document).ready(function(){
 				closeProgressBar();								// Ladebalken schliessen
 				geojsonErreichbarkeitspolygon = L.geoJson(dataPoly).addTo(map); // Erreichbarkeitspolygon auf die Karte bringen
 				boolGeojsonErreichbarkeitspolygon = true;
+			testTime(true);						// Test ob Zeit überschritten worden ist
 			},
 			// Fehlermeldung falls die maximale Wartezeit ueberschritten wurde
 			error: function(){
+				testTime(false);						// Test ob Zeit überschritten worden ist
 				closeProgressBar();
 				document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
 				document.getElementById('modalBodyAlert').innerHTML =  "<div>In dem von Ihnen ausgewählten Bereich stehen eine Vielzahl an BOS-Standorte zur Verfügung. Eine Abfrage des Erreichbarkeitspolygons kann nicht ausgeführt werden. <br>Bitte verkleinern Sie Ihren Kartenausschnitt oder verändern Sie ihre Zeitliche Hilfsfrist und führen Sie eine erneute Suchanfrage durch. Polygone können zudem nur in Deutschland erzeugt werden!</div>";
@@ -238,6 +285,7 @@ function closeProgressBar(){
 	jQuery('body').css('pointer-events','auto');	// Mausevents wieder zulassen
 }
 
+<<<<<<< HEAD
 // ADRESSSUCHE MIT HILFE DES GEOCODER MICROSERVICE
 function searchAdress(){
     var searchData = jQuery("#formAdress").val(); 			// Auslesen des Formulars
@@ -273,4 +321,48 @@ function searchAdress(){
 		document.getElementById('modalBodyAlert').innerHTML =  "<div>Das Suchformular ist leer. Bitte geben Sie eine Adresse ein.</div>";
 		jQuery("#modalAlert").modal();
 	}
+=======
+//****************************************
+// TESTS
+//****************************************
+
+//Test ob Adresssuche leer oder durchführbar
+function testSearchData(zustand){	//Zeile 51 und 78
+	if (zustand==true){
+		var ausgabeSearchData=('Adresssuche wird durchgeführt');
+	}else{
+		var ausgabeSearchData=('Adresssuche kann nicht durchgeführt werden');
+	}
+	console.log(ausgabeSearchData);
+}
+
+//Test ob Adresse gefunden wurde
+function testDataGeocoder(zustand){		//Zeile 63 und 69
+	if (zustand==true){
+		var ausgabeDataGeocoder=('Adresse gefunden');
+	}else{
+		var ausgabeDataGeocoder=('Keine Adresse gefunden');
+	}
+	console.log(ausgabeDataGeocoder);
+}
+
+//Test ob BOS gefunden wurden
+function testBosMarker(zustand){		//Zeile 116 und 135
+	if (zustand==true){
+		var ausgabeBosMarker=('BOS gefunden');
+	}else{
+		var ausgabeBosMarker=('Keine BOS gefunden');
+	}
+	console.log(ausgabeBosMarker);
+}
+
+//Test ob Zeit überschritten wurde
+function testTime(zustand){				// Zeile 115, 134, 146, 178 und 182
+	if (zustand==true){
+		var ausgabeTime=('Zeit nicht überschritten');
+	}else{
+		var ausgabeTime=('Zeit überschritten');
+	}
+	console.log(ausgabeTime);
+>>>>>>> branch 'master' of https://github.com/a-rol/bosservice.git
 }
