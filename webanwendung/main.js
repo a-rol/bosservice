@@ -45,9 +45,9 @@ jQuery(document).ready(function(){
 	
 	// ADRESSSUCHE
 	// Auslösen der Adresssuche durch Klick auf den Button "Adresse suchen"
-    jQuery("#btnSearch").click(function(){ 				
+	jQuery("#btnSearch").click(function(){ 				
 		searchAdress();
-    });
+	});
 	
 	// Auslösen der Adresssuche per Enter-Button (keyCode = 13)
 	jQuery("#formAdress").on('keyup', function (e) {
@@ -60,11 +60,11 @@ jQuery(document).ready(function(){
 	jQuery("#formAdress").on('click', function (e) {
 		document.getElementById("formAdress").value = "";	// Formular zur Adresssuche leeren
 	});
-	  
+	
 	// REAKTION BEI KLICK AUF DEN BUTTON "BOS anzeigen"
-    jQuery("#btnBos").click(function(){
-        var urlBosStandorte = "http://143.93.114.120/overpassAPI";		// Adresse des MicroServices
-        var queryIntrest = "fire_station";								// Festlegung welche BOS angefragt werden sollen
+	jQuery("#btnBos").click(function(){
+		var urlBosStandorte = "http://143.93.114.120/overpassAPI";		// Adresse des MicroServices
+		var queryIntrest = "fire_station";								// Festlegung welche BOS angefragt werden sollen
 		if (boolGeojsonErreichbarkeitspolygon == true){
 			geojsonErreichbarkeitspolygon.clearLayers();				// bisherige Erreichbarkeitspolygone loeschen, falls vorhanden 
 		};
