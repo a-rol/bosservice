@@ -60,7 +60,7 @@ public class Main {
 	    return HttpServerFactory.create(getURI(), resourceConfig);
 	}
 	/**
-	* Startet den Server
+	* gibt die URI des Servers zurück
 	* @return Uri
 	*/    
 	private static URI getURI() {

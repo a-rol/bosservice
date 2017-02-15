@@ -38,12 +38,12 @@ public class RequestHandler {
 	//****************************************
     
     /**
-    *
+    * Stellt das Erreichbarkeitspolygon zur Verfügung
     * @param Post Parameter aus URL als Json
     * @return GeoJson mit den Ergebnispolygonenen der Abfrage
     * @throws 
     */
-    public String getParam(String post){
+    public static String getParam(String post){
     	Gson gson = new Gson();        
         InputJson inputJson = gson.fromJson(post, InputJson.class);
         String output = CallIsochroneApi.URLConnectionReader(inputJson);

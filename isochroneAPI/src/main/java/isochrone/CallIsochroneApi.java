@@ -34,7 +34,7 @@ public class CallIsochroneApi {
 	// PUBLIC METHODS
 	//****************************************
 	/**
-    *
+    * Ruft den Graphhopper Isochrone Services auf und bereitet die Daten für den MS auf
     * @param inputJson Klasse mit den Abfrageparametern
     * @return Uri for geocoder request on graphhopper API
     * @throws 
@@ -62,8 +62,9 @@ public class CallIsochroneApi {
 		        //Umwandlung des Java-JsonObjektes in ein Json(String)
 		        String geoJson = gson.toJson(geoJsonObjList.get(0).getPolygons(), Polygon.class);		        
 	        	return geoJson;        	
+	        }else{
+	        return "nothing";
 	        }
-	        return "nothing";     	        
 		}catch (IOException e) {
 				//event 
 				e.printStackTrace();
