@@ -6,10 +6,10 @@ import java.util.List;
 import com.google.gson.Gson;
 
 import de.hsmainz.bos.model.GeoJsonFeature;
-import de.hsmainz.bos.model.GeoJsonFeatureCollection;
-import de.hsmainz.bos.model.Place;
 import de.hsmainz.bos.model.GeoJsonFeature.GeoJsonGeometry;
 import de.hsmainz.bos.model.GeoJsonFeature.GeoJsonProperties;
+import de.hsmainz.bos.model.GeoJsonFeatureCollection;
+import de.hsmainz.bos.model.Place;
 
 /**
  * class for handling the response of the overpass API from OSM.
@@ -48,7 +48,7 @@ public class ResponseHandler {
 	 * @return jsonInString -> allBOS in a String
 	 */
 
-	public String getResponse(ArrayList<Place> allBOS) {
+	public static String getResponse(ArrayList<Place> allBOS) {
 
 		List<GeoJsonFeature> features = new ArrayList<GeoJsonFeature>();
 		for (Place place : allBOS) {
