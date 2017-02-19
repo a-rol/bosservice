@@ -1,12 +1,6 @@
 package overpass;
 
-/**
-* Tests for the possible results of the ResponseHandler class (based on Thomas RequestHandlerTest)
-* @since 16.02.2017
-* @author Angelique
-*/
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -15,7 +9,7 @@ import de.hsmainz.bos.overpassApi.ResponseHandler;
 
 public class ResponseHandlerTest {
 	/**
-	 * Tests for {@link ResponseHandler}
+	 * Tests for ResponseHandler
 	 */
 	@Test
 	public void singleBOS() throws Exception {
