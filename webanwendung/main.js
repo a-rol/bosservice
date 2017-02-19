@@ -207,7 +207,6 @@ function createObjPoly(){
 			// Latitude / Longitude des jeweiligen Markers
 			var latitude = bosMarkerList._layers[fireMarker]._latlng.lat;
 			var longitude = bosMarkerList._layers[fireMarker]._latlng.lng;
-			
 			// Pruefen ob die Koordinaten der jeweiligen Marker im der aktuellen BoundingBox der Map sind
 			if(map.getBounds().contains([parseFloat(latitude), parseFloat(longitude)]) == true){
 				// Teilobjekt zum jeweiligen Marker erzeugen
@@ -225,6 +224,10 @@ function createObjPoly(){
 			}
         }
     };
+    if (i == 0){
+    	jQuery("#btnPolygon").prop('disabled', true);		// Button "Polygon berechnen" nun nicht mehr auswaehlbar
+		jQuery("#btnDelete").prop('disabled', true);		// Button "Daten loeschen" nun nicht mehr auswaehlbar
+    }
     obj.bos = bos;							// Gesamtobjekt erzeugen
     var jsonString = JSON.stringify(obj);	// Objekt in JSON-Notation erzeugen und in String-Variablen schreiben
     return jsonString;						// Rueckgabe der Variable

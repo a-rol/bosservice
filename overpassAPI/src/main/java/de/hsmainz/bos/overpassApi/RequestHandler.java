@@ -44,20 +44,12 @@ public class RequestHandler {
 	// ****************************************
 
 	/**
-	 * Gets the.
-	 *
 	 * @param callback
-	 *            the callback
 	 * @param interest
-	 *            the interest
 	 * @param south
-	 *            the south
 	 * @param west
-	 *            the west
 	 * @param north
-	 *            the north
 	 * @param east
-	 *            the east
 	 * @return the string
 	 */
 	@GET
@@ -85,11 +77,9 @@ public class RequestHandler {
 
 	/**
 	 * Ad callback.
-	 *
+	 * 
 	 * @param callback
-	 *            the callback
 	 * @param response
-	 *            the response
 	 * @return callback response
 	 */
 
@@ -102,22 +92,18 @@ public class RequestHandler {
 
 	/**
 	 * Gets the relevant BOS.
-	 *
+	 * 
 	 * @param interest
-	 *            the interest
 	 * @param south
-	 *            the south
 	 * @param west
-	 *            the west
 	 * @param north
-	 *            the north
 	 * @param east
-	 *            the east
 	 * @return ArrayList of all BOS found in a given area (bbox with south,
 	 *         west, north and east)
 	 */
 
-	public ArrayList<Place> getRelevantBOS(String interest, Double south, Double west, Double north, Double east) {
+	public static ArrayList<Place> getRelevantBOS(String interest, Double south, Double west, Double north,
+			Double east) {
 		BOS bos = new BOS();
 		bos.setInterest(interest);
 		bos.setSouth(south);

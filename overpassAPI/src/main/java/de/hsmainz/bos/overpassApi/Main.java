@@ -19,14 +19,8 @@ public class Main {
 	// CONSTANTS
 	// ****************************************
 
-	/** The Constant BASE_URI. */
 	// URI the Grizzly HTTP server will listen on
 	public static final String BASE_URI = "http://localhost:8050/";
-
-	/**
-	 * Instantiates a new main.
-	 */
-	@SuppressWarnings("deprecation")
 
 	// ****************************************
 	// VARIABLES
@@ -35,10 +29,6 @@ public class Main {
 	// ****************************************
 	// INIT/CONSTRUCTOR
 	// ****************************************
-
-	private Main() {
-
-	}
 
 	// ****************************************
 	// GETTER/SETTER
@@ -55,7 +45,7 @@ public class Main {
 	 */
 
 	public static HttpServer startServer() {
-		final ResourceConfig rc = new ResourceConfig().packages("de.hs_mainz.bos.overpassApi");
+		final ResourceConfig rc = new ResourceConfig().packages("de.hsmainz.bos.overpassApi");
 		return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
 	}
 
@@ -63,11 +53,10 @@ public class Main {
 	 * Main server method.
 	 *
 	 * @param args
-	 *            the arguments
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
 	 */
 
+	@SuppressWarnings("deprecation")
 	public static void main(String[] args) throws IOException {
 		final HttpServer server = startServer();
 		System.out.println(String.format(
