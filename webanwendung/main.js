@@ -253,7 +253,7 @@ function searchAdress(){
     var searchData = jQuery("#formAdress").val(); 			// Auslesen des Formulars
 	displayProgressBar();									// Ladebalken starten
 	if (searchData.length > 0){								// Kommunikation mit dem Geocode MicroService nur wenn das Formular gefuellt ist
-		var urlGeocoder = "http://143.93.114.139/geocoder";	// Adresse des MicroServices
+		var urlGeocoder = "http://143.93.114.120/geocoder";	// Adresse des MicroServices
 		jQuery.ajax({
 			type: 'GET',									// Übergabetyp: Get
 			dataType: 'jsonp',								// Übergabe erfolgt im jsonp-Format
