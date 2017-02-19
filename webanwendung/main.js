@@ -253,7 +253,7 @@ function searchAdress(){
     var searchData = jQuery("#formAdress").val(); 			// Auslesen des Formulars
 	displayProgressBar();									// Ladebalken starten
 	if (searchData.length > 0){								// Kommunikation mit dem Geocode MicroService nur wenn das Formular gefuellt ist
-		var urlGeocoder = "http://143.93.114.139/geocoder";	// Adresse des MicroServices
+		var urlGeocoder = "http://143.93.114.120/geocoder";	// Adresse des MicroServices
 		jQuery.ajax({
 			type: 'GET',									// Übergabetyp: Get
 			dataType: 'jsonp',								// Übergabe erfolgt im jsonp-Format
@@ -277,7 +277,7 @@ function searchAdress(){
 			}
 		})
 	}else{
-		// Fehlermeldung falls das Suchformular leer ist
+		// Fehlermeldung falls das Suchformular leer ist 
 		closeProgressBar();
 		document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
 		document.getElementById('modalBodyAlert').innerHTML =  "<div>Das Suchformular ist leer. Bitte geben Sie eine Adresse ein.</div>";
