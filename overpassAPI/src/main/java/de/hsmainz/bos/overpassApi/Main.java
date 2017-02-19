@@ -45,8 +45,10 @@ public class Main {
 	 */
 
 	public static HttpServer startServer() {
-		final ResourceConfig rc = new ResourceConfig().packages("de.hsmainz.bos.overpassApi");
-		return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
+		final ResourceConfig rc = new ResourceConfig()
+				.packages("de.hsmainz.bos.overpassApi");
+		return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI),
+				rc);
 	}
 
 	/**
@@ -60,7 +62,8 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		final HttpServer server = startServer();
 		System.out.println(String.format(
-				"Jersery app started with WADL available at " + "%sapplication.wadl\nHit enter to stop it...",
+				"Jersery app started with WADL available at "
+						+ "%sapplication.wadl\nHit enter to stop it...",
 				BASE_URI));
 		System.in.read();
 		server.stop();

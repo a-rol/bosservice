@@ -65,13 +65,14 @@ public class OverpassAPI {
 		ArrayList<Place> places = (ArrayList<Place>) placesResult.getList();
 
 		if (places.isEmpty()) {
-			System.out.println("No BOS found");
+			// System.out.println("No BOS found");
 		} else {
 			for (Place place : places) {
-				System.out.println(place.getId());
-				System.out.println(place.getLat());
-				System.out.println(place.getLon());
-				System.out.println(place.getTags().getName());
+				// System.out.println(place.getId());
+				// System.out.println(place.getLat());
+				// System.out.println(place.getLon());
+				// System.out.println(place.getTags().getName());
+
 			}
 		}
 
@@ -88,8 +89,10 @@ public class OverpassAPI {
 
 	public String buildRequest(String keyword, BOS bos) {
 		String requestUri = "";
-		String bbox = String.valueOf(bos.getSouth()) + "," + String.valueOf(bos.getWest()) + ","
-				+ String.valueOf(bos.getNorth()) + "," + String.valueOf(bos.getEast());
+		String bbox = String.valueOf(bos.getSouth()) + ","
+				+ String.valueOf(bos.getWest()) + ","
+				+ String.valueOf(bos.getNorth()) + ","
+				+ String.valueOf(bos.getEast());
 		StringBuilder sb = new StringBuilder(PLACES_API_BASE);
 		sb.append("node(" + bbox + ")[amenity=" + keyword + "];out;");
 
