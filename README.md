@@ -1,5 +1,5 @@
 # BOS-SERVICE
-![BOS-SERVICE](webanwendung\marker\logo.png "Logo BOS")
+![BOS-SERVICE](https://github.com/a-rol/bosservice/blob/master/webanwendung/marker/logo.png "Logo BOS")
 ------
 **BOS** --> Blaulichtorganisationen (Feuerwehr, Polizei, Ersthelfer) [German]
 
