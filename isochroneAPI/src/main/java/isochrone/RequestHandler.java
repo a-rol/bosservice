@@ -43,10 +43,10 @@ public class RequestHandler {
     * @return GeoJson mit den Ergebnispolygonenen der Abfrage
     * @throws 
     */
-    public static String getParam(String post){
+    public static String getPolygon(String post){
     	Gson gson = new Gson();        
         InputJson inputJson = gson.fromJson(post, InputJson.class);
-        String output = CallIsochroneApi.URLConnectionReader(inputJson);
+        String output = CallIsochroneApi.getGeojson(inputJson);
     	return output;
     }
     

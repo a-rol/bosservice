@@ -34,12 +34,12 @@ public class CallIsochroneApi {
 	// PUBLIC METHODS
 	//****************************************
 	/**
-    * Ruft den Graphhopper Isochrone Services auf und bereitet die Daten für den MS auf
+    * Ruft den Graphhopper Isochrone Services auf und bereitet die Daten für den MS auf (geoJson Format)
     * @param inputJson Klasse mit den Abfrageparametern
     * @return Uri for geocoder request on graphhopper API
     * @throws {IOException} bei fehlerhaften oder nicht im Bereich liegenden Angaben im InputJson
     */
-	public static String URLConnectionReader(InputJson inputJson) {
+	public static String getGeojson(InputJson inputJson) {
 		try{
 			if (inputJson.getCoordinates().size() >= 1){ 	
 		        List<IsochroneGeojson> geoJsonObjList = new ArrayList<IsochroneGeojson>();

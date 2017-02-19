@@ -50,9 +50,7 @@ public class OverpassAPI {
 	 * Search.
 	 *
 	 * @param keyword
-	 *            bos
 	 * @param bos
-	 *            the bos
 	 * @return places
 	 */
 
@@ -84,9 +82,7 @@ public class OverpassAPI {
 	 * Builds the request.
 	 *
 	 * @param keyword
-	 *            bos
 	 * @param bos
-	 *            the bos
 	 * @return requestUri
 	 */
 
@@ -108,9 +104,7 @@ public class OverpassAPI {
 	 * Post query.
 	 *
 	 * @param request
-	 *            in
 	 * @param in
-	 *            the in
 	 * @return in
 	 */
 
