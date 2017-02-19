@@ -277,7 +277,7 @@ function searchAdress(){
 			}
 		})
 	}else{
-		// Fehlermeldung falls das Suchformular leer ist
+		// Fehlermeldung falls das Suchformular leer ist 
 		closeProgressBar();
 		document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
 		document.getElementById('modalBodyAlert').innerHTML =  "<div>Das Suchformular ist leer. Bitte geben Sie eine Adresse ein.</div>";
