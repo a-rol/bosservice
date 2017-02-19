@@ -1,6 +1,7 @@
 package overpass;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
@@ -9,7 +10,7 @@ import de.hsmainz.bos.overpassApi.ResponseHandler;
 
 public class ResponseHandlerTest {
 	/**
-	 * Tests for ResponseHandler
+	 * Tests for {@link} ResponseHandler
 	 */
 	@Test
 	public void singleBOS() throws Exception {
