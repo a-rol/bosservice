@@ -100,6 +100,7 @@ jQuery(document).ready(function(){
 					for (var coord in dataPoint.features){
 						var longFireStation = dataPoint.features[coord].geometry.coordinates[0];
 						var latFireStation = dataPoint.features[coord].geometry.coordinates[1];
+						testKoord(longFireStation, latFireStation);		// Test ob Koordinaten plausibel
 						var marker = new L.marker([latFireStation, longFireStation],{icon: fireIcon});
 						bosMarkerList.addLayer(marker);
 					}
@@ -152,7 +153,7 @@ jQuery(document).ready(function(){
 				closeProgressBar();								// Ladebalken schliessen
 				geojsonErreichbarkeitspolygon = L.geoJson(dataPoly).addTo(map); // Erreichbarkeitspolygon auf die Karte bringen
 				boolGeojsonErreichbarkeitspolygon = true;
-			testTime(true);						// Test ob Zeit überschritten worden ist
+			testTime(true);								// Test ob Zeit überschritten worden ist
 			},
 			// Fehlermeldung falls die maximale Wartezeit ueberschritten wurde
 			error: function(){
@@ -207,6 +208,7 @@ function createObjPoly(){
 			// Latitude / Longitude des jeweiligen Markers
 			var latitude = bosMarkerList._layers[fireMarker]._latlng.lat;
 			var longitude = bosMarkerList._layers[fireMarker]._latlng.lng;
+			testKoord(longitude, latitude);	// Test ob Koordinaten plausibel
 			// Pruefen ob die Koordinaten der jeweiligen Marker im der aktuellen BoundingBox der Map sind
 			if(map.getBounds().contains([parseFloat(latitude), parseFloat(longitude)]) == true){
 				// Teilobjekt zum jeweiligen Marker erzeugen
@@ -264,11 +266,15 @@ function searchAdress(){
 			success: function(dataGeocoder){				// Durchfuehrung im Erfolgsfall 
 				closeProgressBar();							// Ladebalken schliessen
 				if (dataGeocoder.features.length > 0 && searchData !=""){
+					testSearchData(true);					// Test ob Adresssuche leer oder durchführbar
+					testDataGeocoder(true);					// Test ob Adresse gefunden worden ist
 					// die als Ergebnis zurueckgegebenen Daten verarbeiten und mit der Karte in den gesuchten Bereich zoomen
 					longMapcenter = dataGeocoder.features[0].geometry.coordinates[0];
 					latMapcenter = dataGeocoder.features[0].geometry.coordinates[1];
+					testKoord(longMapcenter, latMapcenter);	// Test ob Koordinaten plausibel
 					map.setView(new L.LatLng(latMapcenter, longMapcenter), 12);
 				}else{
+					testDataGeocoder(false);				// Test ob Adresse gefunden worden ist
 					// Fehlermeldung falls keine Adresse zur Eingabe gefunden wurde
 					document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
 					document.getElementById('modalBodyAlert').innerHTML =  "<div>Die von Ihnen eingegeben Adresse ist fehlerhaft. Es konnte kein passender Ort zugeordnet werden. Bitte verändern Sie Ihren Eingabe und führen Sie eine erneute Suchanfrage durch.</div>";
@@ -277,6 +283,7 @@ function searchAdress(){
 			}
 		})
 	}else{
+		testSearchData(false);					//Test ob Adresssuche leer oder durchführbar
 		// Fehlermeldung falls das Suchformular leer ist 
 		closeProgressBar();
 		document.getElementById('modalHeaderAlert').innerHTML = "<h4 class='modal-title'>Achtung!</h4>";
@@ -291,7 +298,7 @@ function searchAdress(){
 //****************************************
 
 //Test ob Adresssuche leer oder durchführbar
-function testSearchData(zustand){	//Zeile 51 und 78
+function testSearchData(zustand){	//Zeile 269 und 286
 	if (zustand==true){
 		var ausgabeSearchData=('Adresssuche wird durchgeführt');
 	}else{
@@ -301,7 +308,7 @@ function testSearchData(zustand){	//Zeile 51 und 78
 }
 
 //Test ob Adresse gefunden wurde
-function testDataGeocoder(zustand){		//Zeile 63 und 69
+function testDataGeocoder(zustand){		//Zeile 270 und 277
 	if (zustand==true){
 		var ausgabeDataGeocoder=('Adresse gefunden');
 	}else{
@@ -311,7 +318,7 @@ function testDataGeocoder(zustand){		//Zeile 63 und 69
 }
 
 //Test ob BOS gefunden wurden
-function testBosMarker(zustand){		//Zeile 116 und 135
+function testBosMarker(zustand){		//Zeile 93 und 113
 	if (zustand==true){
 		var ausgabeBosMarker=('BOS gefunden');
 	}else{
@@ -321,11 +328,21 @@ function testBosMarker(zustand){		//Zeile 116 und 135
 }
 
 //Test ob Zeit überschritten wurde
-function testTime(zustand){				// Zeile 115, 134, 146, 178 und 182
+function testTime(zustand){				// Zeile 92, 112, 124, 156 und 160
 	if (zustand==true){
 		var ausgabeTime=('Zeit nicht überschritten');
 	}else{
 		var ausgabeTime=('Zeit überschritten');
 	}
 	console.log(ausgabeTime);
+}
+
+//Test Plausibilität der Koordinaten 
+function testKoord(long, lat){	//Zeile 103, 211 und 274
+	if (long < lat){					// Trifft nicht auf jedes Land zu; ist speziell fuer Deutschland!
+		var ausgabeSearchData=('Plausible Koordinaten');
+	}else{
+		var ausgabeSearchData=('Nicht plausible Koordinaten');
+	}
+	console.log(ausgabeSearchData);
 }
